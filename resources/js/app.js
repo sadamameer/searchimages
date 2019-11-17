@@ -7,6 +7,11 @@
 require('./bootstrap');
 window.Vue = require('vue');
 
+import Vue from 'vue';
+import Carousel3d from 'vue-carousel-3d';
+
+Vue.use(Carousel3d);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -18,7 +23,11 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('images', require('./components/Images.vue').default);
+Vue.component('main-header' , require('./components/Header.vue').default);
+Vue.component('navbar'      , require('./components/Navbar.vue').default);
+Vue.component('images'      , require('./components/Images.vue').default);
+Vue.component('images-grid' , require('./components/ImagesGrid.vue').default);
+Vue.component('images-cube' , require('./components/ImagesCube.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -26,6 +35,7 @@ Vue.component('images', require('./components/Images.vue').default);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+window.EventBus = new Vue();
 const app = new Vue({
     el: '#app',
 });

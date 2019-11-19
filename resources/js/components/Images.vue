@@ -44,7 +44,7 @@
                 height          : 1024,
                 width           : 1024,
                 sort            : "relevance",
-                ViewType        : "cube",
+                ViewType        : "grid",
             }
         },
         mounted() {
@@ -56,6 +56,12 @@
             EventBus.$on('PageUpdated', (PageNumber) => {
                 this.page = PageNumber;
                 this.fetchPhotos(false);
+            });
+            
+            EventBus.$on('SwitchView', () => {
+                if (this.ViewType == "cube") {this.ViewType = "grid";   }
+                else{this.ViewType = "cube";}
+                this.fetchPhotos();
             });
         },
         methods: {

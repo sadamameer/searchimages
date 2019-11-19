@@ -1946,7 +1946,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       height: 1024,
       width: 1024,
       sort: "relevance",
-      ViewType: "cube"
+      ViewType: "grid"
     };
   },
   mounted: function mounted() {
@@ -1961,6 +1961,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this2.page = PageNumber;
 
       _this2.fetchPhotos(false);
+    });
+    EventBus.$on('SwitchView', function () {
+      if (_this2.ViewType == "cube") {
+        _this2.ViewType = "grid";
+      } else {
+        _this2.ViewType = "cube";
+      }
+
+      _this2.fetchPhotos();
     });
   },
   methods: {
@@ -2034,6 +2043,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["PerPage"],
   data: function data() {
@@ -2082,6 +2109,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     ChangePageNumber: function ChangePageNumber(page_number) {
       EventBus.$emit("PageUpdated", page_number);
+    },
+    SwitchView: function SwitchView(page_number) {
+      EventBus.$emit("SwitchView");
     }
   }
 });
@@ -2143,6 +2173,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["PerPage"],
   data: function data() {
@@ -2191,6 +2222,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     ChangePageNumber: function ChangePageNumber(page_number) {
       EventBus.$emit("PageUpdated", page_number);
+    },
+    SwitchView: function SwitchView(page_number) {
+      EventBus.$emit("SwitchView");
     }
   }
 });
@@ -37708,7 +37742,43 @@ var render = function() {
         _vm.images.length
           ? _c(
               "div",
+              { staticClass: "mt-3" },
               [
+                _vm.images.length && !_vm.FirstLoaded
+                  ? _c("div", { staticClass: "row mb-5 mr-2 ml-2" }, [
+                      _c("div", { staticClass: "col" }, [
+                        _c("span", [
+                          _vm._v("Showing results from "),
+                          _c("b", [
+                            _vm._v(
+                              _vm._s(
+                                _vm.page * _vm.per_page - (_vm.per_page - 1)
+                              ) +
+                                "-" +
+                                _vm._s(_vm.page * _vm.per_page)
+                            )
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col text-right" }, [
+                        _c("span", [
+                          _c("b", [_vm._v(_vm._s(_vm.total_results))]),
+                          _vm._v(" matching images found")
+                        ]),
+                        _vm._v(" "),
+                        _c("i", {
+                          staticClass: "fa fa-th-large ml-3 cursor-pointer",
+                          on: {
+                            click: function($event) {
+                              return _vm.SwitchView()
+                            }
+                          }
+                        })
+                      ])
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
                 _c(
                   "carousel-3d",
                   {
@@ -37719,8 +37789,8 @@ var render = function() {
                       "controls-width": 30,
                       "controls-height": 60,
                       "autoplay-timeout": 1000,
-                      width: 400,
-                      height: 250
+                      width: 450,
+                      height: 350
                     }
                   },
                   _vm._l(_vm.images, function(image, index) {
@@ -37731,7 +37801,47 @@ var render = function() {
                     )
                   }),
                   1
-                )
+                ),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _vm.images.length && !_vm.FirstLoaded
+                  ? _c("div", { staticClass: "row m-auto" }, [
+                      _vm.PrevPage
+                        ? _c("div", { staticClass: "col" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-outline-success",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.ChangePageNumber(_vm.page - 1)
+                                  }
+                                }
+                              },
+                              [_vm._v("Previous")]
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.NextPage
+                        ? _c("div", { staticClass: "col text-right" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-outline-success",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.ChangePageNumber(_vm.page + 1)
+                                  }
+                                }
+                              },
+                              [_vm._v("Next")]
+                            )
+                          ])
+                        : _vm._e()
+                    ])
+                  : _vm._e()
               ],
               1
             )
@@ -37773,7 +37883,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
     _vm.images.length && !_vm.FirstLoaded
-      ? _c("div", { staticClass: "row mt-4 mb-4" }, [
+      ? _c("div", { staticClass: "row mt-3 mb-4" }, [
           _c("div", { staticClass: "col" }, [
             _c("span", [
               _vm._v("Showing results from "),
@@ -37791,7 +37901,16 @@ var render = function() {
             _c("span", [
               _c("b", [_vm._v(_vm._s(_vm.total_results))]),
               _vm._v(" matching images found")
-            ])
+            ]),
+            _vm._v(" "),
+            _c("i", {
+              staticClass: "fa fa-object-ungroup ml-3 cursor-pointer",
+              on: {
+                click: function($event) {
+                  return _vm.SwitchView()
+                }
+              }
+            })
           ])
         ])
       : _vm._e(),

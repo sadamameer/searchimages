@@ -1,11 +1,12 @@
 <template>
     <div class="container-fluid">
-        <div class="row mt-4 mb-4" v-if="images.length && !FirstLoaded">
+        <div class="row mt-3 mb-4" v-if="images.length && !FirstLoaded">
             <div class="col">
                 <span>Showing results from <b>{{ (page * per_page) - (per_page - 1) }}-{{ page * per_page }}</b></span>
             </div>
             <div class="col text-right">
                 <span><b>{{ total_results }}</b> matching images found</span>
+                <i class="fa fa-object-ungroup ml-3 cursor-pointer" @click="SwitchView()"></i>
             </div>
         </div>
         <div class="row" v-if="images.length">
@@ -94,6 +95,10 @@ export default {
         ChangePageNumber: function(page_number) {
             EventBus.$emit("PageUpdated" , page_number);
         },
+
+        SwitchView: function(page_number) {
+            EventBus.$emit("SwitchView");
+        }
     },
 }
 </script>

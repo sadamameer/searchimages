@@ -1880,6 +1880,11 @@ __webpack_require__.r(__webpack_exports__);
     fetchPhotos: function fetchPhotos() {
       EventBus.$emit("SearchPhotos", this.Query);
     }
+  },
+  computed: {
+    btnDisabled: function btnDisabled() {
+      return this.Query.length ? false : true;
+    }
   }
 });
 
@@ -2003,6 +2008,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2233,6 +2245,11 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     fetchPhotos: function fetchPhotos() {
       EventBus.$emit("SearchPhotos", this.Query);
+    }
+  },
+  computed: {
+    btnDisabled: function btnDisabled() {
+      return this.Query.length ? false : true;
     }
   }
 });
@@ -37588,7 +37605,7 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-primary btn-block my-2 my-sm-0",
-                  attrs: { type: "button" },
+                  attrs: { type: "button", disabled: _vm.btnDisabled },
                   on: {
                     click: function($event) {
                       return _vm.fetchPhotos()
@@ -37687,33 +37704,49 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return !_vm.FirstLoaded
-    ? _c(
-        "div",
-        [
-          _c(
-            "carousel-3d",
-            {
-              attrs: {
-                "controls-visible": true,
-                "controls-prev-html": "&#10092;",
-                "controls-next-html": "&#10093;",
-                "controls-width": 30,
-                "controls-height": 60,
-                "autoplay-timeout": 1000,
-                width: 400,
-                height: 250
-              }
-            },
-            _vm._l(_vm.images, function(image, index) {
-              return _c("slide", { key: image.id, attrs: { index: index } }, [
-                _c("img", { attrs: { src: image.url_m } })
-              ])
-            }),
-            1
-          )
-        ],
-        1
-      )
+    ? _c("div", [
+        _vm.images.length
+          ? _c(
+              "div",
+              [
+                _c(
+                  "carousel-3d",
+                  {
+                    attrs: {
+                      "controls-visible": true,
+                      "controls-prev-html": "&#10092;",
+                      "controls-next-html": "&#10093;",
+                      "controls-width": 30,
+                      "controls-height": 60,
+                      "autoplay-timeout": 1000,
+                      width: 400,
+                      height: 250
+                    }
+                  },
+                  _vm._l(_vm.images, function(image, index) {
+                    return _c(
+                      "slide",
+                      { key: image.id, attrs: { index: index } },
+                      [_c("img", { attrs: { src: image.url_m } })]
+                    )
+                  }),
+                  1
+                )
+              ],
+              1
+            )
+          : _c("div", { staticClass: "container text-center mt-5 p-5" }, [
+              _c("img", {
+                staticClass: "m-auto",
+                attrs: { src: "404.png", alt: "Nothing Found" }
+              }),
+              _vm._v(" "),
+              _c("br"),
+              _c("br"),
+              _vm._v(" "),
+              _c("h5", [_vm._v("No images found. Please try another query.")])
+            ])
+      ])
     : _vm._e()
 }
 var staticRenderFns = []
@@ -37962,7 +37995,7 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-outline-success my-2 my-sm-0",
-                    attrs: { type: "button" },
+                    attrs: { type: "button", disabled: _vm.btnDisabled },
                     on: {
                       click: function($event) {
                         return _vm.fetchPhotos(true)
@@ -50602,8 +50635,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\SearchImages\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\SearchImages\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\Work\searchimages\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\Work\searchimages\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

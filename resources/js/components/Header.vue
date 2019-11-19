@@ -13,7 +13,7 @@
                     <input class="form-control mr-sm-2" type="text" placeholder="e.g. Mountains" aria-label="Search" v-model="Query">
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-primary btn-block my-2 my-sm-0" type="button" @click="fetchPhotos()">Search</button>
+                    <button class="btn btn-primary btn-block my-2 my-sm-0" type="button" @click="fetchPhotos()" :disabled="btnDisabled">Search</button>
                 </div>
             </div>
         </div>
@@ -26,7 +26,7 @@ export default {
     data() {
         return {
             FirstLoaded : this.FirstLoad,
-            Query       : this.text,
+            Query       : this.text
         }
     },
     mounted() {
@@ -40,5 +40,10 @@ export default {
             EventBus.$emit("SearchPhotos" , this.Query);
         },
     },
+    computed: {
+        btnDisabled: function () {
+            return (this.Query.length) ? false : true;
+        }
+    }
 }
 </script>

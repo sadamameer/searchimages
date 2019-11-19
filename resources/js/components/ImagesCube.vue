@@ -1,19 +1,26 @@
 <template>
     <div v-if="!FirstLoaded">
-		 <carousel-3d 
-		 	:controls-visible="true"
-			:controls-prev-html="'&#10092;'"
-			:controls-next-html="'&#10093;'" 
-			:controls-width="30"
-			:controls-height="60"
-			:autoplay-timeout="1000"
-			:width="400"
-			:height="250"
-		>
-			<slide :index="index" v-for="(image , index) in images" :key="image.id">
-				<img :src="image.url_m">
-			</slide>
-		</carousel-3d>
+        <div v-if="images.length">
+            <carousel-3d 
+                :controls-visible="true"
+                :controls-prev-html="'&#10092;'"
+                :controls-next-html="'&#10093;'" 
+                :controls-width="30"
+                :controls-height="60"
+                :autoplay-timeout="1000"
+                :width="400"
+                :height="250"
+            >
+                <slide :index="index" v-for="(image , index) in images" :key="image.id">
+                    <img :src="image.url_m">
+                </slide>
+            </carousel-3d>
+        </div>
+        <div class="container text-center mt-5 p-5" v-else>
+            <img src="404.png" alt="Nothing Found" class="m-auto">
+            <br><br>
+            <h5>No images found. Please try another query.</h5>
+        </div>
 	</div>
 </template>
 

@@ -10,7 +10,7 @@
                 <ul class="navbar-nav mr-auto"></ul>
                 <span class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" type="text" placeholder="e.g. Mountains" aria-label="Search" v-model="Query">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="button" @click="fetchPhotos(true)">Search</button>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="button" @click="fetchPhotos(true)" :disabled="btnDisabled">Search</button>
                 </span>
             </div>
         </nav>
@@ -38,5 +38,10 @@ export default {
             EventBus.$emit("SearchPhotos" , this.Query);
         },
     },
+    computed: {
+        btnDisabled: function () {
+            return (this.Query.length) ? false : true;
+        }
+    }
 }
 </script>

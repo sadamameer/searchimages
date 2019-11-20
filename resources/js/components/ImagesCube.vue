@@ -1,36 +1,38 @@
 <template>
-    <div v-if="!FirstLoaded">
+    <div>
         <div v-if="images.length" class="mt-3">
-            <div class="row mb-5 mr-2 ml-2" v-if="images.length && !FirstLoaded">
-                <div class="col">
-                    <span>Showing results from <b>{{ (page * per_page) - (per_page - 1) }}-{{ page * per_page }}</b></span>
+            <div v-if="!FirstLoaded">
+                <div class="row mb-5 mr-2 ml-2" v-if="images.length && !FirstLoaded">
+                    <div class="col">
+                        <span>Showing results from <b>{{ (page * per_page) - (per_page - 1) }}-{{ page * per_page }}</b></span>
+                    </div>
+                    <div class="col text-right">
+                        <span><b>{{ total_results }}</b> matching images found</span>
+                        <i class="fa fa-th-large ml-3 cursor-pointer" @click="SwitchView()"></i>
+                    </div>
                 </div>
-                <div class="col text-right">
-                    <span><b>{{ total_results }}</b> matching images found</span>
-                    <i class="fa fa-th-large ml-3 cursor-pointer" @click="SwitchView()"></i>
-                </div>
-            </div>
-            <carousel-3d 
-                :controls-visible="true"
-                :controls-prev-html="'&#10092;'"
-                :controls-next-html="'&#10093;'" 
-                :controls-width="30"
-                :controls-height="60"
-                :autoplay-timeout="1000"
-                :width="450"
-                :height="350"
-            >
-                <slide :index="index" v-for="(image , index) in images" :key="image.id">
-                    <img :src="image.url_m">
-                </slide>
-            </carousel-3d>
-            <br>
-            <div class="row m-auto" v-if="images.length && !FirstLoaded">
-                <div class="col" v-if="PrevPage">
-                    <button class="btn btn-outline-success" @click="ChangePageNumber(page-1)">Previous</button>
-                </div>
-                <div class="col text-right" v-if="NextPage">
-                    <button class="btn btn-outline-success" @click="ChangePageNumber(page+1)">Next</button>
+                <carousel-3d 
+                    :controls-visible="true"
+                    :controls-prev-html="'&#10092;'"
+                    :controls-next-html="'&#10093;'" 
+                    :controls-width="30"
+                    :controls-height="60"
+                    :autoplay-timeout="1000"
+                    :width="450"
+                    :height="350"
+                >
+                    <slide :index="index" v-for="(image , index) in images" :key="image.id">
+                        <img :src="image.url_m">
+                    </slide>
+                </carousel-3d>
+                <br>
+                <div class="row m-auto" v-if="images.length && !FirstLoaded">
+                    <div class="col" v-if="PrevPage">
+                        <button class="btn btn-outline-success" @click="ChangePageNumber(page-1)">Previous</button>
+                    </div>
+                    <div class="col text-right" v-if="NextPage">
+                        <button class="btn btn-outline-success" @click="ChangePageNumber(page+1)">Next</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,7 +41,7 @@
             <br><br>
             <h5>No images found. Please try another query.</h5>
         </div>
-	</div>
+    </div>
 </template>
 
 <script>

@@ -38095,7 +38095,7 @@ var render = function() {
   return _c("div", [
     _c("nav", { staticClass: "navbar navbar-expand-lg navbar-dark bg-dark" }, [
       _c("a", { staticClass: "navbar-brand", attrs: { href: "/" } }, [
-        _vm._v("Search Images")
+        _vm._v("Exploration of Web Image Search Results")
       ]),
       _vm._v(" "),
       _vm._m(0),
@@ -50781,8 +50781,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\xampp\htdocs\searchimages\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\searchimages\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\Work\searchimages\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\Work\searchimages\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -2174,6 +2174,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["PerPage"],
   data: function data() {
@@ -37882,165 +37889,191 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container-fluid" }, [
-    _vm.images.length && !_vm.FirstLoaded
-      ? _c("div", { staticClass: "row mt-3 mb-4" }, [
-          _c("div", { staticClass: "col" }, [
-            _c("span", [
-              _vm._v("Showing results from "),
-              _c("b", [
-                _vm._v(
-                  _vm._s(_vm.page * _vm.per_page - (_vm.per_page - 1)) +
-                    "-" +
-                    _vm._s(_vm.page * _vm.per_page)
-                )
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col text-right" }, [
-            _c("span", [
-              _c("b", [_vm._v(_vm._s(_vm.total_results))]),
-              _vm._v(" matching images found")
-            ]),
-            _vm._v(" "),
-            _c("i", {
-              staticClass: "fa fa-object-ungroup ml-3 cursor-pointer",
-              on: {
-                click: function($event) {
-                  return _vm.SwitchView()
-                }
-              }
-            })
-          ])
-        ])
-      : _vm._e(),
-    _vm._v(" "),
     _vm.images.length
-      ? _c(
-          "div",
-          { staticClass: "row" },
-          _vm._l(_vm.images, function(image) {
-            return _c(
-              "div",
-              {
-                key: image.id,
-                staticClass: "col-md-4 p-0",
-                attrs: { id: image.id }
-              },
-              [
-                _c("div", { staticClass: "content" }, [
+      ? _c("div", { staticClass: "mt-3" }, [
+          _vm.images.length && !_vm.FirstLoaded
+            ? _c("div", { staticClass: "row mt-3 mb-4" }, [
+                _c("div", { staticClass: "col" }, [
                   _c("span", [
-                    _c("div", { staticClass: "content-overlay" }),
-                    _vm._v(" "),
-                    _c("img", {
-                      staticClass: "content-image",
-                      attrs: { src: image.url_m }
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "content-details fadeIn-bottom" },
-                      [
-                        _c("h3", { staticClass: "content-title" }, [
-                          _vm._v(_vm._s(image.ownername.toUpperCase()))
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "d-inline-flex" }, [
-                          _c("span", [
-                            _c("i", { staticClass: "fa fa-heart" }),
-                            _c("p", [_vm._v(_vm._s(image.count_faves))])
-                          ]),
-                          _vm._v(" "),
-                          _c("span", [
-                            _c("i", { staticClass: "fa fa-comments" }),
-                            _c("p", [_vm._v(_vm._s(image.count_comments))])
-                          ]),
-                          _vm._v(" "),
-                          _c("span", [
-                            _c("i", { staticClass: "fa fa-eye" }),
-                            _c("p", [_vm._v(_vm._s(image.views))])
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "mt-2" }, [
-                          _c(
-                            "a",
-                            { attrs: { href: image.url_o, target: "_blank" } },
-                            [
-                              _c(
-                                "button",
-                                { staticClass: "btn btn-outline-light btn-sm" },
-                                [_vm._v("View Original")]
-                              )
-                            ]
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "mt-3" }, [
-                          _c("p", { staticClass: "content-text mb-0" }, [
-                            _vm._v(_vm._s(image.datetaken))
-                          ]),
-                          _vm._v(" "),
-                          image.originalformat
-                            ? _c(
-                                "span",
-                                { staticClass: "badge badge-success" },
-                                [
-                                  _vm._v(
-                                    _vm._s(image.originalformat.toUpperCase())
-                                  )
-                                ]
-                              )
-                            : _vm._e()
-                        ])
-                      ]
-                    )
+                    _vm._v("Showing results from "),
+                    _c("b", [
+                      _vm._v(
+                        _vm._s(_vm.page * _vm.per_page - (_vm.per_page - 1)) +
+                          "-" +
+                          _vm._s(_vm.page * _vm.per_page)
+                      )
+                    ])
                   ])
-                ])
-              ]
-            )
-          }),
-          0
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.images.length && !_vm.FirstLoaded
-      ? _c("div", { staticClass: "row mt-4 mb-4" }, [
-          _vm.PrevPage
-            ? _c("div", { staticClass: "col" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-success",
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col text-right" }, [
+                  _c("span", [
+                    _c("b", [_vm._v(_vm._s(_vm.total_results))]),
+                    _vm._v(" matching images found")
+                  ]),
+                  _vm._v(" "),
+                  _c("i", {
+                    staticClass: "fa fa-object-ungroup ml-3 cursor-pointer",
                     on: {
                       click: function($event) {
-                        return _vm.ChangePageNumber(_vm.page - 1)
+                        return _vm.SwitchView()
                       }
                     }
-                  },
-                  [_vm._v("Previous")]
-                )
+                  })
+                ])
               ])
             : _vm._e(),
           _vm._v(" "),
-          _vm.NextPage
-            ? _c("div", { staticClass: "col text-right" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-success",
-                    on: {
-                      click: function($event) {
-                        return _vm.ChangePageNumber(_vm.page + 1)
-                      }
-                    }
-                  },
-                  [_vm._v("Next")]
-                )
+          _vm.images.length
+            ? _c(
+                "div",
+                { staticClass: "row" },
+                _vm._l(_vm.images, function(image) {
+                  return _c(
+                    "div",
+                    {
+                      key: image.id,
+                      staticClass: "col-md-4 p-0",
+                      attrs: { id: image.id }
+                    },
+                    [
+                      _c("div", { staticClass: "content" }, [
+                        _c("span", [
+                          _c("div", { staticClass: "content-overlay" }),
+                          _vm._v(" "),
+                          _c("img", {
+                            staticClass: "content-image",
+                            attrs: { src: image.url_m }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "content-details fadeIn-bottom" },
+                            [
+                              _c("h3", { staticClass: "content-title" }, [
+                                _vm._v(_vm._s(image.ownername.toUpperCase()))
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "d-inline-flex" }, [
+                                _c("span", [
+                                  _c("i", { staticClass: "fa fa-heart" }),
+                                  _c("p", [_vm._v(_vm._s(image.count_faves))])
+                                ]),
+                                _vm._v(" "),
+                                _c("span", [
+                                  _c("i", { staticClass: "fa fa-comments" }),
+                                  _c("p", [
+                                    _vm._v(_vm._s(image.count_comments))
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("span", [
+                                  _c("i", { staticClass: "fa fa-eye" }),
+                                  _c("p", [_vm._v(_vm._s(image.views))])
+                                ])
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "mt-2" }, [
+                                _c(
+                                  "a",
+                                  {
+                                    attrs: {
+                                      href: image.url_o,
+                                      target: "_blank"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass:
+                                          "btn btn-outline-light btn-sm"
+                                      },
+                                      [_vm._v("View Original")]
+                                    )
+                                  ]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "mt-3" }, [
+                                _c("p", { staticClass: "content-text mb-0" }, [
+                                  _vm._v(_vm._s(image.datetaken))
+                                ]),
+                                _vm._v(" "),
+                                image.originalformat
+                                  ? _c(
+                                      "span",
+                                      { staticClass: "badge badge-success" },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            image.originalformat.toUpperCase()
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ])
+                            ]
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                }),
+                0
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.images.length && !_vm.FirstLoaded
+            ? _c("div", { staticClass: "row mt-4 mb-4" }, [
+                _vm.PrevPage
+                  ? _c("div", { staticClass: "col" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-outline-success",
+                          on: {
+                            click: function($event) {
+                              return _vm.ChangePageNumber(_vm.page - 1)
+                            }
+                          }
+                        },
+                        [_vm._v("Previous")]
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.NextPage
+                  ? _c("div", { staticClass: "col text-right" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-outline-success",
+                          on: {
+                            click: function($event) {
+                              return _vm.ChangePageNumber(_vm.page + 1)
+                            }
+                          }
+                        },
+                        [_vm._v("Next")]
+                      )
+                    ])
+                  : _vm._e()
               ])
             : _vm._e()
         ])
-      : _vm._e()
+      : _c("div", { staticClass: "container text-center mt-5 p-5" }, [
+          _c("img", {
+            staticClass: "m-auto",
+            attrs: { src: "404.png", alt: "Nothing Found" }
+          }),
+          _vm._v(" "),
+          _c("br"),
+          _c("br"),
+          _vm._v(" "),
+          _c("h5", [_vm._v("No images found. Please try another query.")])
+        ])
   ])
 }
 var staticRenderFns = []

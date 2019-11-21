@@ -1938,7 +1938,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       text: '',
       method: "flickr.photos.search",
       extras: "description, date_taken, owner_name, original_format, url_m, url_o, views, originalformat, count_comments, count_faves, realname",
-      per_page: 150,
+      per_page: 125,
       content_type: "json",
       format: "json",
       nojsoncallback: 1,
@@ -2017,6 +2017,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -37744,127 +37746,128 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return !_vm.FirstLoaded
-    ? _c("div", [
-        _vm.images.length
-          ? _c(
-              "div",
-              { staticClass: "mt-3" },
-              [
-                _vm.images.length && !_vm.FirstLoaded
-                  ? _c("div", { staticClass: "row mb-5 mr-2 ml-2" }, [
-                      _c("div", { staticClass: "col" }, [
-                        _c("span", [
-                          _vm._v("Showing results from "),
-                          _c("b", [
-                            _vm._v(
-                              _vm._s(
-                                _vm.page * _vm.per_page - (_vm.per_page - 1)
-                              ) +
-                                "-" +
-                                _vm._s(_vm.page * _vm.per_page)
-                            )
+  return _c("div", [
+    _vm.images.length
+      ? _c("div", { staticClass: "mt-3" }, [
+          !_vm.FirstLoaded
+            ? _c(
+                "div",
+                [
+                  _vm.images.length && !_vm.FirstLoaded
+                    ? _c("div", { staticClass: "row mb-5 mr-2 ml-2" }, [
+                        _c("div", { staticClass: "col" }, [
+                          _c("span", [
+                            _vm._v("Showing results from "),
+                            _c("b", [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.page * _vm.per_page - (_vm.per_page - 1)
+                                ) +
+                                  "-" +
+                                  _vm._s(_vm.page * _vm.per_page)
+                              )
+                            ])
                           ])
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "col text-right" }, [
-                        _c("span", [
-                          _c("b", [_vm._v(_vm._s(_vm.total_results))]),
-                          _vm._v(" matching images found")
                         ]),
                         _vm._v(" "),
-                        _c("i", {
-                          staticClass: "fa fa-th-large ml-3 cursor-pointer",
-                          on: {
-                            click: function($event) {
-                              return _vm.SwitchView()
+                        _c("div", { staticClass: "col text-right" }, [
+                          _c("span", [
+                            _c("b", [_vm._v(_vm._s(_vm.total_results))]),
+                            _vm._v(" matching images found")
+                          ]),
+                          _vm._v(" "),
+                          _c("i", {
+                            staticClass: "fa fa-th-large ml-3 cursor-pointer",
+                            on: {
+                              click: function($event) {
+                                return _vm.SwitchView()
+                              }
                             }
-                          }
-                        })
+                          })
+                        ])
                       ])
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _c(
-                  "carousel-3d",
-                  {
-                    attrs: {
-                      "controls-visible": true,
-                      "controls-prev-html": "&#10092;",
-                      "controls-next-html": "&#10093;",
-                      "controls-width": 30,
-                      "controls-height": 60,
-                      "autoplay-timeout": 1000,
-                      width: 450,
-                      height: 350
-                    }
-                  },
-                  _vm._l(_vm.images, function(image, index) {
-                    return _c(
-                      "slide",
-                      { key: image.id, attrs: { index: index } },
-                      [_c("img", { attrs: { src: image.url_m } })]
-                    )
-                  }),
-                  1
-                ),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _vm.images.length && !_vm.FirstLoaded
-                  ? _c("div", { staticClass: "row m-auto" }, [
-                      _vm.PrevPage
-                        ? _c("div", { staticClass: "col" }, [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-outline-success",
-                                on: {
-                                  click: function($event) {
-                                    return _vm.ChangePageNumber(_vm.page - 1)
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "carousel-3d",
+                    {
+                      attrs: {
+                        "controls-visible": true,
+                        "controls-prev-html": "&#10092;",
+                        "controls-next-html": "&#10093;",
+                        "controls-width": 30,
+                        "controls-height": 60,
+                        "autoplay-timeout": 1000,
+                        width: 450,
+                        height: 350
+                      }
+                    },
+                    _vm._l(_vm.images, function(image, index) {
+                      return _c(
+                        "slide",
+                        { key: image.id, attrs: { index: index } },
+                        [_c("img", { attrs: { src: image.url_m } })]
+                      )
+                    }),
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _vm.images.length && !_vm.FirstLoaded
+                    ? _c("div", { staticClass: "row m-auto" }, [
+                        _vm.PrevPage
+                          ? _c("div", { staticClass: "col" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-outline-success",
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.ChangePageNumber(_vm.page - 1)
+                                    }
                                   }
-                                }
-                              },
-                              [_vm._v("Previous")]
-                            )
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _vm.NextPage
-                        ? _c("div", { staticClass: "col text-right" }, [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-outline-success",
-                                on: {
-                                  click: function($event) {
-                                    return _vm.ChangePageNumber(_vm.page + 1)
+                                },
+                                [_vm._v("Previous")]
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.NextPage
+                          ? _c("div", { staticClass: "col text-right" }, [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-outline-success",
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.ChangePageNumber(_vm.page + 1)
+                                    }
                                   }
-                                }
-                              },
-                              [_vm._v("Next")]
-                            )
-                          ])
-                        : _vm._e()
-                    ])
-                  : _vm._e()
-              ],
-              1
-            )
-          : _c("div", { staticClass: "container text-center mt-5 p-5" }, [
-              _c("img", {
-                staticClass: "m-auto",
-                attrs: { src: "404.png", alt: "Nothing Found" }
-              }),
-              _vm._v(" "),
-              _c("br"),
-              _c("br"),
-              _vm._v(" "),
-              _c("h5", [_vm._v("No images found. Please try another query.")])
-            ])
-      ])
-    : _vm._e()
+                                },
+                                [_vm._v("Next")]
+                              )
+                            ])
+                          : _vm._e()
+                      ])
+                    : _vm._e()
+                ],
+                1
+              )
+            : _vm._e()
+        ])
+      : _c("div", { staticClass: "container text-center mt-5 p-5" }, [
+          _c("img", {
+            staticClass: "m-auto",
+            attrs: { src: "404.png", alt: "Nothing Found" }
+          }),
+          _vm._v(" "),
+          _c("br"),
+          _c("br"),
+          _vm._v(" "),
+          _c("h5", [_vm._v("No images found. Please try another query.")])
+        ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -37910,16 +37913,7 @@ var render = function() {
                   _c("span", [
                     _c("b", [_vm._v(_vm._s(_vm.total_results))]),
                     _vm._v(" matching images found")
-                  ]),
-                  _vm._v(" "),
-                  _c("i", {
-                    staticClass: "fa fa-object-ungroup ml-3 cursor-pointer",
-                    on: {
-                      click: function($event) {
-                        return _vm.SwitchView()
-                      }
-                    }
-                  })
+                  ])
                 ])
               ])
             : _vm._e(),

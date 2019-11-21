@@ -36,7 +36,7 @@
                 text            : '',
                 method          : "flickr.photos.search",
                 extras          : "description, date_taken, owner_name, original_format, url_m, url_o, views, originalformat, count_comments, count_faves, realname",
-                per_page        : 150,
+                per_page        : 125,
                 content_type    : "json",
                 format          : "json",
                 nojsoncallback  : 1,

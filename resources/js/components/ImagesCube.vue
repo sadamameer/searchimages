@@ -11,29 +11,41 @@
                         <i class="fa fa-th-large ml-3 cursor-pointer" @click="SwitchView()"></i>
                     </div>
                 </div>
-                <carousel-3d 
-                    :controls-visible="true"
-                    :controls-prev-html="'&#10092;'"
-                    :controls-next-html="'&#10093;'" 
-                    :controls-width="30"
-                    :controls-height="60"
-                    :autoplay-timeout="1000"
-                    :width="450"
-                    :height="350"
-                >
-                    <slide :index="index" v-for="(image , index) in images" :key="image.id">
-                        <img :src="image.url_m">
-                    </slide>
-                </carousel-3d>
-                <br>
-                <div class="row m-auto" v-if="images.length && !FirstLoaded">
-                    <div class="col" v-if="PrevPage">
-                        <button class="btn btn-outline-success" @click="ChangePageNumber(page-1)">Previous</button>
-                    </div>
-                    <div class="col text-right" v-if="NextPage">
-                        <button class="btn btn-outline-success" @click="ChangePageNumber(page+1)">Next</button>
+
+
+                <div id="container" class="w-100">
+                    <div class="row m-auto">
+                        <div class="col">
+                            <div class="row box m-auto" :id="`${'box'+x}`" :style="`${'z-index: '+x+'; top: '+(x * margin)+'px; left: '+(x * margin)+'px;'}`" v-for="x in slides" :key="x">
+                                <div class="cell" v-for="image in getImages(x)" :key="image.id">
+                                    <a :href="image.url_o" target="_blank">
+                                        <img :src="image.url_m" alt="bull" class="w-100 h-100">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col text-center mt-5">
+                            <h1>Controls</h1>
+                            <hr>
+                            <div class="row m-auto" v-if="images.length && !FirstLoaded">
+                                <div class="col-lg-12 mb-1" v-for="x in slides" :key="x">
+                                    <button class="btn btn-block btn-primary" v-if="currentActive == x" @click="toggleSlide(x)">Show Layer {{ x }}</button>
+                                    <button class="btn btn-block btn-outline-primary" v-else @click="toggleSlide(x)">Show Layer {{ x }}</button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row m-auto" v-if="images.length && !FirstLoaded">
+                                <div class="col-lg-12 mb-1" v-if="PrevPage">
+                                    <button class="btn btn-block btn-outline-success" @click="ChangePageNumber(page-1)">Previous</button>
+                                </div>
+                                <div class="col-lg-12" v-if="NextPage">
+                                    <button class="btn btn-block btn-outline-success" @click="ChangePageNumber(page+1)">Next</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <br><br>
             </div>
         </div>
         <div class="container text-center mt-5 p-5" v-else>
@@ -45,6 +57,7 @@
 </template>
 
 <script>
+import { timeout } from 'q';
 export default {
     props : ["PerPage"],
     data() {
@@ -56,6 +69,10 @@ export default {
             per_page      : this.PerPage,
             total_results : 0,
             total_pages   : 0,
+            slides        : 0,
+            currentActive : 0,
+            margin        : 40,
+            per_slide     : 20,
             images        : []
         }
     },
@@ -70,6 +87,9 @@ export default {
             this.total_pages   = Photos.pages;
             this.per_page      = Photos.perpage;
             this.total_results = Photos.total;
+            this.slides        = this.per_page / this.per_slide;
+            this.currentActive = this.slides;
+            setTimeout(() => {this.toggleSlide(this.slides);}, 500);
         });
     },
     watch: {
@@ -97,6 +117,29 @@ export default {
 
         SwitchView: function(page_number) {
             EventBus.$emit("SwitchView");
+        },
+        
+        toggleSlide: function(slide) {
+            this.currentActive = slide;
+            for (let index = 1; index <= this.slides; index++) {
+                $("#box"+index).css("z-index" , index);
+                $("#box"+index).css("transform" , "scale(1)");
+                $("#box"+index).css("transition" , "transform 1s");
+            }
+            $("#box"+slide).css("z-index" , (this.slides + 1));
+            $("#box"+slide).css("transform" , "scale(1.05)");
+            $("#box"+slide).css("transition" , "transform 1s");
+        },
+        
+        getImages: function(x) {
+            x = x - 1;
+            let chunk = [];
+
+            for (let index = (x * this.per_slide); index < ((x * this.per_slide) + this.per_slide); index++) {
+                chunk.push(this.images[index]);
+            }
+
+            return chunk;
         }
     },
 }

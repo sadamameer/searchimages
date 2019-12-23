@@ -7,7 +7,7 @@
                 </div>
                 <div class="col text-right">
                     <span><b>{{ total_results }}</b> matching images found</span>
-                    <!-- <i class="fa fa-object-ungroup ml-3 cursor-pointer" @click="SwitchView()"></i> -->
+                    <i class="fa fa-object-ungroup ml-3 cursor-pointer" @click="SwitchView()"></i>
                 </div>
             </div>
             <div class="row" v-if="images.length">

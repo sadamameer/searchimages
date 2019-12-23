@@ -549,5 +549,30 @@ img {
 }
 
 .cursor-pointer{
-  cursor: pointer;;
+  cursor: pointer;
+}
+
+#container{
+  position: absolute;
+  top: 100px;
+}
+
+#container .box {
+  position: absolute;
+  background-color: darkslategrey;
+  border: 2px solid #28a745;
+  border-radius: 5px;
+  width: 350px;
+  height: 300px;
+  box-shadow: 0 0 20px #ccc !important;
+}
+
+#container .box .cell{
+  border: 1px solid #28a745;
+  width: 20%;
+}
+
+#container .box .cell img:hover{
+  transform: scale(2);
+  transition: transform 1s;
 }

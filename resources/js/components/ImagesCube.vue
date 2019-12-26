@@ -72,7 +72,7 @@ export default {
             slides        : 0,
             currentActive : 0,
             margin        : 40,
-            per_slide     : 20,
+            per_slide     : 25,
             images        : []
         }
     },
@@ -125,10 +125,12 @@ export default {
                 $("#box"+index).css("z-index" , index);
                 $("#box"+index).css("transform" , "scale(1)");
                 $("#box"+index).css("transition" , "transform 1s");
+                $("#box"+index).addClass("dull");
             }
             $("#box"+slide).css("z-index" , (this.slides + 1));
             $("#box"+slide).css("transform" , "scale(1.05)");
             $("#box"+slide).css("transition" , "transform 1s");
+            $("#box"+slide).removeClass("dull");
         },
         
         getImages: function(x) {

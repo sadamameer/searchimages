@@ -1938,7 +1938,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       text: '',
       method: "flickr.photos.search",
       extras: "description, date_taken, owner_name, original_format, url_m, url_o, views, originalformat, count_comments, count_faves, realname",
-      per_page: 100,
+      per_page: 125,
       content_type: "json",
       format: "json",
       nojsoncallback: 1,
@@ -1946,7 +1946,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       height: 1024,
       width: 1024,
       sort: "relevance",
-      ViewType: "cube"
+      ViewType: "grid"
     };
   },
   mounted: function mounted() {
@@ -2092,7 +2092,7 @@ __webpack_require__.r(__webpack_exports__);
       slides: 0,
       currentActive: 0,
       margin: 40,
-      per_slide: 20,
+      per_slide: 25,
       images: []
     };
   },
@@ -2146,11 +2146,13 @@ __webpack_require__.r(__webpack_exports__);
         $("#box" + index).css("z-index", index);
         $("#box" + index).css("transform", "scale(1)");
         $("#box" + index).css("transition", "transform 1s");
+        $("#box" + index).addClass("dull");
       }
 
       $("#box" + slide).css("z-index", this.slides + 1);
       $("#box" + slide).css("transform", "scale(1.05)");
       $("#box" + slide).css("transition", "transform 1s");
+      $("#box" + slide).removeClass("dull");
     },
     getImages: function getImages(x) {
       x = x - 1;

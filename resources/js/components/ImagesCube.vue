@@ -18,19 +18,19 @@
                         <div class="col">
                             <div class="row box m-auto" :id="`${'box'+x}`" :style="`${'z-index: '+x+'; top: '+(x * margin)+'px; left: '+(x * margin)+'px;'}`" v-for="x in slides" :key="x">
                                 <div class="cell" v-for="image in getImages(x)" :key="image.id">
-                                    <a :href="image.url_o" target="_blank">
+                                    <a href="javascript:;" @click="show(image)">
                                         <img :src="image.url_m" alt="bull" class="w-100 h-100">
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <div class="col text-center mt-5">
-                            <h1>Controls</h1>
+                            <h1>Switch Planes</h1>
                             <hr>
                             <div class="row m-auto" v-if="images.length && !FirstLoaded">
                                 <div class="col-lg-12 mb-1" v-for="x in slides" :key="x">
-                                    <button class="btn btn-block btn-primary" v-if="currentActive == x" @click="toggleSlide(x)">Show Layer {{ x }}</button>
-                                    <button class="btn btn-block btn-outline-primary" v-else @click="toggleSlide(x)">Show Layer {{ x }}</button>
+                                    <button class="btn btn-block btn-primary" v-if="currentActive == x" @click="toggleSlide(x)">Show Plane {{ x }}</button>
+                                    <button class="btn btn-block btn-outline-primary" v-else @click="toggleSlide(x)">Show Plane {{ x }}</button>
                                 </div>
                             </div>
                             <hr>
@@ -53,6 +53,30 @@
             <br><br>
             <h5>No images found. Please try another query.</h5>
         </div>
+        <modal name="imageDetails" :width="1000" :height="320">
+            <div class="row m-auto">
+                <div class="col p-0">
+                    <img :src="image.url_m" alt="bull" class="w-100 h-100">
+                </div>
+                <div class="col">
+                    <div class="content-details content-right fadeIn-bottom">
+                        <h3 class="content-title">{{image.ownername}}</h3>
+                        <div class="d-inline-flex">
+                            <span><i class="fa fa-heart text-danger"></i><p>{{image.count_faves}}</p></span>
+                            <span><i class="fa fa-comments text-info"></i><p>{{image.count_comments}}</p></span>
+                            <span><i class="fa fa-eye text-warning"></i><p>{{image.views}}</p></span>
+                        </div>
+                        <div class="mt-2">
+                            <a :href="image.url_o" target="_blank"><button class="btn btn-outline-dark btn-sm">Download</button></a>
+                        </div>
+                        <div class="mt-3">
+                            <p class="content-text mb-0">{{ image.datetaken }}</p>
+                            <span class="badge badge-success" v-if="image.originalformat">{{ image.originalformat }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -73,7 +97,8 @@ export default {
             currentActive : 0,
             margin        : 40,
             per_slide     : 25,
-            images        : []
+            images        : [],
+            image         : "",
         }
     },
     mounted() {
@@ -88,8 +113,8 @@ export default {
             this.per_page      = Photos.perpage;
             this.total_results = Photos.total;
             this.slides        = this.per_page / this.per_slide;
-            this.currentActive = this.slides;
-            setTimeout(() => {this.toggleSlide(this.slides);}, 500);
+            this.currentActive = 1;
+            setTimeout(() => {this.toggleSlide(1);}, 500);
         });
     },
     watch: {
@@ -107,6 +132,15 @@ export default {
         },
     },
     methods: {
+        show: function(image) {
+            this.image = image;
+            this.$modal.show('imageDetails');
+        },
+
+        hide: function() {
+            this.$modal.hide('imageDetails');
+        },
+
         fetchPhotos: function() {
             EventBus.$emit("SearchPhotos" , this.Query);
         },

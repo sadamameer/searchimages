@@ -8,9 +8,9 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import Vue from 'vue';
-import Carousel3d from 'vue-carousel-3d';
+import VModal from 'vue-js-modal';
 
-Vue.use(Carousel3d);
+Vue.use(VModal);
 
 /**
  * The following block of code may be used to automatically register your

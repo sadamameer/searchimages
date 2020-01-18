@@ -24,7 +24,7 @@
                                 <span><i class="fa fa-eye"></i><p>{{image.views}}</p></span>
                             </div>
                             <div class="mt-2">
-                                <a :href="image.url_o" target="_blank"><button class="btn btn-outline-light btn-sm">View Original</button></a>
+                                <a :href="image.url_o" target="_blank"><button class="btn btn-outline-light btn-sm">Download</button></a>
                             </div>
                             <div class="mt-3">
                                 <p class="content-text mb-0">{{ image.datetaken }}</p>

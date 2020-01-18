@@ -588,6 +588,10 @@ img {
   left: 50%;
 }
 
-.content-right h3,p{ 
+.content-right h3{ 
+  color: black !important;
+}
+
+.content-right p{ 
   color: black !important;
 }

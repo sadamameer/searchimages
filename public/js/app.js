@@ -1937,7 +1937,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       api_key: '1a566a4170a3b2d920ef82fbd9123627',
       text: '',
       method: "flickr.photos.search",
-      extras: "description, date_taken, owner_name, original_format, url_m, url_o, views, originalformat, count_comments, count_faves, realname",
+      extras: "description, date_taken, owner_name, original_format, url_m, url_o, views, originalformat, count_comments, count_faves, realname , tags",
       per_page: 125,
       content_type: "json",
       format: "json",
@@ -1946,7 +1946,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       height: 1024,
       width: 1024,
       sort: "relevance",
-      ViewType: "grid"
+      ViewType: "grid",
+      images: ""
     };
   },
   mounted: function mounted() {
@@ -1955,6 +1956,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     EventBus.$on('SearchPhotos', function (Query) {
       _this2.text = Query;
 
+      _this2.fetchPhotos(true);
+    });
+    EventBus.$on('SearchImages', function () {
       _this2.fetchPhotos(true);
     });
     EventBus.$on('PageUpdated', function (PageNumber) {
@@ -1970,6 +1974,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       _this2.fetchPhotos();
+    });
+    EventBus.$on('DownloadImage', function (imageURL, title) {
+      _this2.downLoadImage(imageURL, title);
+    });
+    EventBus.$on('JaccardIndexedRecords', function () {
+      _this2.getJaccardIndexedRecords(_this2.text);
     });
   },
   methods: {
@@ -1999,8 +2009,53 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       $.getJSON(_this.apiUrl, params, function (data) {
         _this.loader = false;
         _this.FirstLoad = false;
+        _this.images = data.photos.photo;
         EventBus.$emit("FirstLoadedUpdated", _this.FirstLoad, _this.text);
         EventBus.$emit("Photos", data.photos);
+      });
+    },
+    getJaccardIndexedRecords: function getJaccardIndexedRecords(text) {
+      var _this3 = this;
+
+      this.loader = true;
+      axios({
+        url: '/get-jaccard-indexed-records',
+        method: 'POST',
+        responseType: 'json',
+        data: {
+          images: this.images,
+          text: this.text
+        }
+      }).then(function (response) {
+        _this3.loader = false;
+        EventBus.$emit("JIPhotos", response.data);
+      })["catch"](function (error) {
+        this.loader = false;
+        console.log(error);
+      });
+    },
+    downLoadImage: function downLoadImage(imageURL, title) {
+      var _this4 = this;
+
+      this.loader = true;
+      axios({
+        url: '/download',
+        method: 'POST',
+        responseType: 'blob',
+        data: {
+          imageURL: imageURL
+        }
+      }).then(function (response) {
+        _this4.loader = false;
+        var url = window.URL.createObjectURL(new Blob([response.data]));
+        var link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', title + '.jpg');
+        document.body.appendChild(link);
+        link.click();
+      })["catch"](function (error) {
+        this.loader = false;
+        console.log(error);
       });
     }
   }
@@ -2101,6 +2156,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["PerPage"],
@@ -2114,6 +2172,7 @@ __webpack_require__.r(__webpack_exports__);
       total_results: 0,
       total_pages: 0,
       slides: 0,
+      slidesArray: [],
       currentActive: 0,
       margin: 40,
       per_slide: 25,
@@ -2133,11 +2192,18 @@ __webpack_require__.r(__webpack_exports__);
       _this.total_pages = Photos.pages;
       _this.per_page = Photos.perpage;
       _this.total_results = Photos.total;
+      $("#ji").prop("checked", false);
       _this.slides = _this.per_page / _this.per_slide;
-      _this.currentActive = 1;
+
+      _this.getSlidesArray();
+
+      _this.currentActive = _this.slides;
       setTimeout(function () {
-        _this.toggleSlide(1);
+        _this.toggleSlide(_this.slides);
       }, 500);
+    });
+    EventBus.$on('JIPhotos', function (Photos) {
+      _this.images = Photos;
     });
   },
   watch: {
@@ -2155,15 +2221,31 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getJaccardIndexedRecords: function getJaccardIndexedRecords() {
+      if ($('#ji').is(':checked')) {
+        EventBus.$emit("JaccardIndexedRecords");
+      } else {
+        EventBus.$emit("SearchImages");
+      }
+    },
+    downLoadImage: function downLoadImage(imageUrl, title) {
+      EventBus.$emit("DownloadImage", imageUrl, title);
+    },
+    getSlidesArray: function getSlidesArray() {
+      this.slidesArray = [];
+
+      for (var index = 0; index < this.slides; index++) {
+        this.slidesArray.push(index + 1);
+      }
+
+      this.slidesArray = this.slidesArray.slice().reverse();
+    },
     show: function show(image) {
       this.image = image;
       this.$modal.show('imageDetails');
     },
     hide: function hide() {
       this.$modal.hide('imageDetails');
-    },
-    fetchPhotos: function fetchPhotos() {
-      EventBus.$emit("SearchPhotos", this.Query);
     },
     ChangePageNumber: function ChangePageNumber(page_number) {
       EventBus.$emit("PageUpdated", page_number);
@@ -2264,6 +2346,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["PerPage"],
   data: function data() {
@@ -2290,6 +2378,10 @@ __webpack_require__.r(__webpack_exports__);
       _this.total_pages = Photos.pages;
       _this.per_page = Photos.perpage;
       _this.total_results = Photos.total;
+      $("#ji").prop("checked", false);
+    });
+    EventBus.$on('JIPhotos', function (Photos) {
+      _this.images = Photos;
     });
   },
   watch: {
@@ -2307,8 +2399,15 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    fetchPhotos: function fetchPhotos() {
-      EventBus.$emit("SearchPhotos", this.Query);
+    getJaccardIndexedRecords: function getJaccardIndexedRecords() {
+      if ($('#ji').is(':checked')) {
+        EventBus.$emit("JaccardIndexedRecords");
+      } else {
+        EventBus.$emit("SearchImages");
+      }
+    },
+    downLoadImage: function downLoadImage(imageUrl, title) {
+      EventBus.$emit("DownloadImage", imageUrl, title);
     },
     ChangePageNumber: function ChangePageNumber(page_number) {
       EventBus.$emit("PageUpdated", page_number);
@@ -39903,6 +40002,19 @@ var render = function() {
                           ])
                         ]),
                         _vm._v(" "),
+                        _c("div", { staticClass: "col text-center" }, [
+                          _c("input", {
+                            attrs: { type: "checkbox", name: "ji", id: "ji" },
+                            on: {
+                              click: function($event) {
+                                return _vm.getJaccardIndexedRecords()
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _vm._m(0)
+                        ]),
+                        _vm._v(" "),
                         _c("div", { staticClass: "col text-right" }, [
                           _c("span", [
                             _c("b", [_vm._v(_vm._s(_vm.total_results))]),
@@ -39928,12 +40040,12 @@ var render = function() {
                       _c("div", { staticClass: "row m-auto" }, [
                         _c(
                           "div",
-                          { staticClass: "col" },
-                          _vm._l(_vm.slides, function(x) {
+                          { staticClass: "col-md-8" },
+                          _vm._l(_vm.slidesArray, function(x, index) {
                             return _c(
                               "div",
                               {
-                                key: x,
+                                key: index + 1,
                                 staticClass: "row box m-auto",
                                 style:
                                   "" +
@@ -39946,7 +40058,7 @@ var render = function() {
                                     "px;"),
                                 attrs: { id: "" + ("box" + x) }
                               },
-                              _vm._l(_vm.getImages(x), function(image) {
+                              _vm._l(_vm.getImages(index + 1), function(image) {
                                 return _c(
                                   "div",
                                   { key: image.id, staticClass: "cell" },
@@ -39989,10 +40101,13 @@ var render = function() {
                             ? _c(
                                 "div",
                                 { staticClass: "row m-auto" },
-                                _vm._l(_vm.slides, function(x) {
+                                _vm._l(_vm.slidesArray, function(x, index) {
                                   return _c(
                                     "div",
-                                    { key: x, staticClass: "col-lg-12 mb-1" },
+                                    {
+                                      key: index + 1,
+                                      staticClass: "col-lg-12 mb-1"
+                                    },
                                     [
                                       _vm.currentActive == x
                                         ? _c(
@@ -40006,7 +40121,12 @@ var render = function() {
                                                 }
                                               }
                                             },
-                                            [_vm._v("Show Plane " + _vm._s(x))]
+                                            [
+                                              _vm._v(
+                                                "Show Plane " +
+                                                  _vm._s(index + 1)
+                                              )
+                                            ]
                                           )
                                         : _c(
                                             "button",
@@ -40019,7 +40139,12 @@ var render = function() {
                                                 }
                                               }
                                             },
-                                            [_vm._v("Show Plane " + _vm._s(x))]
+                                            [
+                                              _vm._v(
+                                                "Show Plane " +
+                                                  _vm._s(index + 1)
+                                              )
+                                            ]
                                           )
                                     ]
                                   )
@@ -40080,10 +40205,7 @@ var render = function() {
                         ])
                       ])
                     ]
-                  ),
-                  _vm._v(" "),
-                  _c("br"),
-                  _c("br")
+                  )
                 ])
               : _vm._e()
           ])
@@ -40140,7 +40262,17 @@ var render = function() {
                   _c("div", { staticClass: "mt-2" }, [
                     _c(
                       "a",
-                      { attrs: { href: _vm.image.url_o, target: "_blank" } },
+                      {
+                        attrs: { href: "javascript:;" },
+                        on: {
+                          click: function($event) {
+                            return _vm.downLoadImage(
+                              _vm.image.url_o,
+                              _vm.image.title
+                            )
+                          }
+                        }
+                      },
                       [
                         _c(
                           "button",
@@ -40172,7 +40304,16 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "ji" } }, [
+      _c("b", [_vm._v("Jaccard Index")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -40210,6 +40351,19 @@ var render = function() {
                       )
                     ])
                   ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col text-center" }, [
+                  _c("input", {
+                    attrs: { type: "checkbox", name: "ji", id: "ji" },
+                    on: {
+                      click: function($event) {
+                        return _vm.getJaccardIndexedRecords()
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm._m(0)
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col text-right" }, [
@@ -40283,9 +40437,14 @@ var render = function() {
                                 _c(
                                   "a",
                                   {
-                                    attrs: {
-                                      href: image.url_o,
-                                      target: "_blank"
+                                    attrs: { href: "javascript:;" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.downLoadImage(
+                                          image.url_o,
+                                          image.title
+                                        )
+                                      }
                                     }
                                   },
                                   [
@@ -40382,7 +40541,16 @@ var render = function() {
         ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "ji" } }, [
+      _c("b", [_vm._v("Jaccard Index")])
+    ])
+  }
+]
 render._withStripped = true
 
 

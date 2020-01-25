@@ -55,7 +55,7 @@
             });
             
             EventBus.$on('SearchImages', () => {
-                this.fetchPhotos(true);
+                this.fetchPhotos();
             });
 
             EventBus.$on('PageUpdated', (PageNumber) => {

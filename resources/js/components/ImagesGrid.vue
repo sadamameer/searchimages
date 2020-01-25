@@ -5,6 +5,10 @@
                 <div class="col">
                     <span>Showing results from <b>{{ (page * per_page) - (per_page - 1) }}-{{ page * per_page }}</b></span>
                 </div>
+                <div class="col text-center">
+                    <input type="checkbox" name="ji" id="ji" @click="getJaccardIndexedRecords()">
+                    <label for="ji"><b>Jaccard Index</b></label>
+                </div>
                 <div class="col text-right">
                     <span><b>{{ total_results }}</b> matching images found</span>
                     <i class="fa fa-object-ungroup ml-3 cursor-pointer" @click="SwitchView()"></i>
@@ -24,7 +28,9 @@
                                 <span><i class="fa fa-eye"></i><p>{{image.views}}</p></span>
                             </div>
                             <div class="mt-2">
-                                <a :href="image.url_o" target="_blank"><button class="btn btn-outline-light btn-sm">Download</button></a>
+                                <a href="javascript:;" @click="downLoadImage(image.url_o , image.title)">
+                                    <button class="btn btn-outline-light btn-sm">Download</button>
+                                </a>
                             </div>
                             <div class="mt-3">
                                 <p class="content-text mb-0">{{ image.datetaken }}</p>
@@ -78,6 +84,11 @@ export default {
             this.total_pages   = Photos.pages;
             this.per_page      = Photos.perpage;
             this.total_results = Photos.total;
+            $( "#ji" ).prop( "checked" , false );
+        });
+        
+        EventBus.$on('JIPhotos', (Photos) => {
+            this.images        = Photos;
         });
     },
     watch: {
@@ -95,8 +106,17 @@ export default {
         },
     },
     methods: {
-        fetchPhotos: function() {
-            EventBus.$emit("SearchPhotos" , this.Query);
+        getJaccardIndexedRecords: function() {
+            if ($('#ji').is(':checked')) {
+                EventBus.$emit("JaccardIndexedRecords");
+            }
+            else{
+                EventBus.$emit("SearchImages");
+            }
+        },
+        
+        downLoadImage: function(imageUrl , title) {
+            EventBus.$emit("DownloadImage" , imageUrl , title);
         },
 
         ChangePageNumber: function(page_number) {

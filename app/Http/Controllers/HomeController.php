@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use PHPHtmlParser\Dom;
-use __;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -10,58 +8,35 @@ class HomeController extends Controller
     public function index()
     {
         return view("images");
-    }
+	}
+	
+	public function download(Request $request)
+	{
+		$filename = 'temp-image.jpg';
+		$tempImage = tempnam(sys_get_temp_dir(), $filename);
+		copy($request->imageURL, $tempImage);
+		return response()->download($tempImage, $filename);
+	}
 
-    public function search($keyword)
-    {
-        $url = "https://www.google.com/search?q=" . urlencode($keyword) . "&tbm=isch";
-
-		$ua = \Campo\UserAgent::random([
-		    'os_type' => ['Windows', 'OS X'],
-		    'device_type' => 'Desktop'
-		]);
-
-		$options  = [
-			'http' => [
-				'method'     =>"GET",
-				'user_agent' =>  $ua,
-			],
-			'ssl' => [
-				"verify_peer"      => FALSE,
-				"verify_peer_name" => FALSE,
-			],
-		];
-
-		$context  = stream_context_create($options);
-
-		$response = file_get_contents($url, FALSE, $context);
-
-
-		$htmldom = new Dom;
-		$htmldom->loadStr($response, []);
-
-        $results = [];
-
-		foreach ($htmldom->find('.rg_di > .rg_meta') as $n => $dataset) {
-
-			$jsondata = $dataset->text;
-            $data = json_decode($jsondata);
-            
-            return $data;
-
-		    $results[$n]['keyword'] = $keyword;
-		    $results[$n]['slug'] = __::slug($keyword);
-
-		    $results[$n]['title'] = ucwords(__::slug($data->pt, ['delimiter' => ' ']));
-		    // $results[$n]['alt'] = __::slug($data->s, ['delimiter' => ' ']);
-		    
-		    $results[$n]['url'] = $data->ou;
-		    $results[$n]['filetype'] = $data->ity;
-		    $results[$n]['width'] = $data->ow;
-		    $results[$n]['height'] = $data->oh;
-		    $results[$n]['source'] = $data->ru;
+	public function getJaccardIndexedRecords(Request $request)
+	{
+		$images = $request->images;
+		$JIimages = [];
+		foreach ($images as $key => $image) {
+			$images[$key]["coefficient"] = $this->setSimilarityCoefficient($request->text , $image);
 		}
 
-		return $results;
-    }
+		$sortedImages = collect($images)->sortByDesc("coefficient");
+		foreach ($sortedImages as $key => $img) {array_push($JIimages , $img);}
+		return $JIimages;
+	}
+
+	public function setSimilarityCoefficient( $query, $image, $separator = " " ) {
+		$item1 				= explode( $separator, $query );
+		$item2 				= explode( $separator, $image["tags"] );
+		$arr_intersection	= array_intersect( $item2, $item2 );
+		$arr_union 			= array_merge( $item1, $item2 );
+		$coefficient 		= count( $arr_intersection ) / count( $arr_union );
+		return $coefficient;
+	}
 }

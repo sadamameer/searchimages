@@ -35,7 +35,7 @@
                 api_key         : '1a566a4170a3b2d920ef82fbd9123627',
                 text            : '',
                 method          : "flickr.photos.search",
-                extras          : "description, date_taken, owner_name, original_format, url_m, url_o, views, originalformat, count_comments, count_faves, realname",
+                extras          : "description, date_taken, owner_name, original_format, url_m, url_o, views, originalformat, count_comments, count_faves, realname , tags",
                 per_page        : 125,
                 content_type    : "json",
                 format          : "json",
@@ -45,11 +45,16 @@
                 width           : 1024,
                 sort            : "relevance",
                 ViewType        : "grid",
+                images          : "",
             }
         },
         mounted() {
             EventBus.$on('SearchPhotos', (Query) => {
                 this.text = Query;
+                this.fetchPhotos(true);
+            });
+            
+            EventBus.$on('SearchImages', () => {
                 this.fetchPhotos(true);
             });
 
@@ -62,6 +67,14 @@
                 if (this.ViewType == "cube") {this.ViewType = "grid";   }
                 else{this.ViewType = "cube";}
                 this.fetchPhotos();
+            });
+            
+            EventBus.$on('DownloadImage', (imageURL , title) => {
+                this.downLoadImage(imageURL , title);
+            });
+            
+            EventBus.$on('JaccardIndexedRecords', () => {
+                this.getJaccardIndexedRecords(this.text);
             });
         },
         methods: {
@@ -86,14 +99,54 @@
                     width           : _this.width,
                 }
                 
-                _this.loader = true;
+                _this.loader        = true;
                 $.getJSON(_this.apiUrl, params, function(data){
-                _this.loader        = false;
-                _this.FirstLoad     = false;
-                EventBus.$emit("FirstLoadedUpdated" , _this.FirstLoad , _this.text);
-                EventBus.$emit("Photos" , data.photos);
+                    _this.loader    = false;
+                    _this.FirstLoad = false;
+                    _this.images    = data.photos.photo;
+                    EventBus.$emit("FirstLoadedUpdated" , _this.FirstLoad , _this.text);
+                    EventBus.$emit("Photos" , data.photos);
                 });
-            }
+            },
+
+            getJaccardIndexedRecords: function(text) {
+                this.loader = true;
+                axios({
+                    url          : '/get-jaccard-indexed-records',
+                    method       : 'POST',
+                    responseType : 'json',
+                    data         : { images : this.images , text : this.text },
+                }).then((response) => {
+                    this.loader = false;
+                    EventBus.$emit("JIPhotos" , response.data);
+                })
+                .catch(function (error) {
+                    this.loader = false;
+                    console.log(error);
+                });
+            },
+            
+            downLoadImage: function(imageURL , title) {
+                this.loader = true;
+                axios({
+                    url          : '/download',
+                    method       : 'POST',
+                    responseType : 'blob',
+                    data         : {imageURL : imageURL},
+                }).then((response) => {
+                    this.loader = false;
+                    const url   = window.URL.createObjectURL(new Blob([response.data]));
+                    const link  = document.createElement('a');
+                    link.href   = url;
+                    link.setAttribute('download', title+'.jpg');
+                    document.body.appendChild(link);
+                    link.click();
+                })
+                .catch(function (error) {
+                    this.loader = false;
+                    console.log(error);
+                });
+            },
         }
     }
 </script>

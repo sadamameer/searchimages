@@ -1,7 +1,5 @@
 <?php
 
-use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,3 +12,5 @@ use JanDrda\LaravelGoogleCustomSearchEngine\LaravelGoogleCustomSearchEngine;
 */
 
 Route::get('/', 'HomeController@index');
+Route::post('/get-jaccard-indexed-records', 'HomeController@getJaccardIndexedRecords');
+Route::post('/download', 'HomeController@download');

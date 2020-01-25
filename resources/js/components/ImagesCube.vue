@@ -6,18 +6,20 @@
                     <div class="col">
                         <span>Showing results from <b>{{ (page * per_page) - (per_page - 1) }}-{{ page * per_page }}</b></span>
                     </div>
+                    <div class="col text-center">
+                        <input type="checkbox" name="ji" id="ji" @click="getJaccardIndexedRecords()">
+                        <label for="ji"><b>Jaccard Index</b></label>
+                    </div>
                     <div class="col text-right">
                         <span><b>{{ total_results }}</b> matching images found</span>
                         <i class="fa fa-th-large ml-3 cursor-pointer" @click="SwitchView()"></i>
                     </div>
                 </div>
-
-
                 <div id="container" class="w-100">
                     <div class="row m-auto">
-                        <div class="col">
-                            <div class="row box m-auto" :id="`${'box'+x}`" :style="`${'z-index: '+x+'; top: '+(x * margin)+'px; left: '+(x * margin)+'px;'}`" v-for="x in slides" :key="x">
-                                <div class="cell" v-for="image in getImages(x)" :key="image.id">
+                        <div class="col-md-8">
+                            <div class="row box m-auto" :id="`${'box'+x}`" :style="`${'z-index: '+x+'; top: '+(x * margin)+'px; left: '+(x * margin)+'px;'}`" v-for="(x , index) in slidesArray" :key="index+1">
+                                <div class="cell" v-for="image in getImages(index+1)" :key="image.id">
                                     <a href="javascript:;" @click="show(image)">
                                         <img :src="image.url_m" alt="bull" class="w-100 h-100">
                                     </a>
@@ -28,9 +30,9 @@
                             <h1>Switch Planes</h1>
                             <hr>
                             <div class="row m-auto" v-if="images.length && !FirstLoaded">
-                                <div class="col-lg-12 mb-1" v-for="x in slides" :key="x">
-                                    <button class="btn btn-block btn-primary" v-if="currentActive == x" @click="toggleSlide(x)">Show Plane {{ x }}</button>
-                                    <button class="btn btn-block btn-outline-primary" v-else @click="toggleSlide(x)">Show Plane {{ x }}</button>
+                                <div class="col-lg-12 mb-1" v-for="(x , index) in slidesArray" :key="index+1">
+                                    <button class="btn btn-block btn-primary" v-if="currentActive == x" @click="toggleSlide(x)">Show Plane {{ index+1 }}</button>
+                                    <button class="btn btn-block btn-outline-primary" v-else @click="toggleSlide(x)">Show Plane {{ index+1 }}</button>
                                 </div>
                             </div>
                             <hr>
@@ -45,7 +47,6 @@
                         </div>
                     </div>
                 </div>
-                <br><br>
             </div>
         </div>
         <div class="container text-center mt-5 p-5" v-else>
@@ -67,7 +68,9 @@
                             <span><i class="fa fa-eye text-warning"></i><p>{{image.views}}</p></span>
                         </div>
                         <div class="mt-2">
-                            <a :href="image.url_o" target="_blank"><button class="btn btn-outline-dark btn-sm">Download</button></a>
+                            <a href="javascript:;" @click="downLoadImage(image.url_o , image.title)">
+                                <button class="btn btn-outline-dark btn-sm">Download</button>
+                            </a>
                         </div>
                         <div class="mt-3">
                             <p class="content-text mb-0">{{ image.datetaken }}</p>
@@ -94,6 +97,7 @@ export default {
             total_results : 0,
             total_pages   : 0,
             slides        : 0,
+            slidesArray   : [],
             currentActive : 0,
             margin        : 40,
             per_slide     : 25,
@@ -112,9 +116,15 @@ export default {
             this.total_pages   = Photos.pages;
             this.per_page      = Photos.perpage;
             this.total_results = Photos.total;
+            $( "#ji" ).prop( "checked" , false );
             this.slides        = this.per_page / this.per_slide;
-            this.currentActive = 1;
-            setTimeout(() => {this.toggleSlide(1);}, 500);
+            this.getSlidesArray();
+            this.currentActive = this.slides;
+            setTimeout(() => {this.toggleSlide(this.slides);}, 500);
+        });
+
+        EventBus.$on('JIPhotos', (Photos) => {
+            this.images        = Photos;
         });
     },
     watch: {
@@ -132,6 +142,25 @@ export default {
         },
     },
     methods: {
+        getJaccardIndexedRecords: function() {
+            if ($('#ji').is(':checked')) {
+                EventBus.$emit("JaccardIndexedRecords");
+            }
+            else{
+                EventBus.$emit("SearchImages");
+            }
+        },
+
+        downLoadImage: function(imageUrl , title) {
+            EventBus.$emit("DownloadImage" , imageUrl , title);
+        },
+
+        getSlidesArray: function() {
+            this.slidesArray = [];
+            for (let index = 0; index < this.slides; index++) {this.slidesArray.push(index + 1);}
+            this.slidesArray = this.slidesArray.slice().reverse();
+        },
+        
         show: function(image) {
             this.image = image;
             this.$modal.show('imageDetails');
@@ -139,10 +168,6 @@ export default {
 
         hide: function() {
             this.$modal.hide('imageDetails');
-        },
-
-        fetchPhotos: function() {
-            EventBus.$emit("SearchPhotos" , this.Query);
         },
 
         ChangePageNumber: function(page_number) {

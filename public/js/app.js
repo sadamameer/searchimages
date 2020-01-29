@@ -1959,7 +1959,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       _this2.fetchPhotos(true);
     });
     EventBus.$on('SearchImages', function () {
-      _this2.fetchPhotos(true);
+      _this2.fetchPhotos();
     });
     EventBus.$on('PageUpdated', function (PageNumber) {
       _this2.page = PageNumber;
@@ -53261,8 +53261,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\Work\searchimages\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\Work\searchimages\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\Work\SearchPhotos\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\Work\SearchPhotos\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -7,7 +7,7 @@
                 </div>
                 <div class="col text-center">
                     <input type="checkbox" name="ji" id="ji" @click="getJaccardIndexedRecords()">
-                    <label for="ji"><b>Jaccard Index</b></label>
+                    <label for="ji"><b>View Sorted Images</b></label>
                 </div>
                 <div class="col text-right">
                     <span><b>{{ total_results }}</b> matching images found</span>
@@ -15,26 +15,16 @@
                 </div>
             </div>
             <div class="row" v-if="images.length">
-                <div class="col-md-4 p-0" v-for="image in images" :key="image.id" :id="image.id">
+                <div class="col-md-2 p-0" v-for="image in images" :key="image.id" :id="image.id">
                     <div class="content">
                         <span>
                         <div class="content-overlay"></div>
                         <img class="content-image" :src="image.url_m">
                         <div class="content-details fadeIn-bottom">
-                            <h3 class="content-title">{{image.ownername.toUpperCase()}}</h3>
-                            <div class="d-inline-flex">
-                                <span><i class="fa fa-heart"></i><p>{{image.count_faves}}</p></span>
-                                <span><i class="fa fa-comments"></i><p>{{image.count_comments}}</p></span>
-                                <span><i class="fa fa-eye"></i><p>{{image.views}}</p></span>
-                            </div>
                             <div class="mt-2">
-                                <a href="javascript:;" @click="downLoadImage(image.url_o , image.title)">
-                                    <button class="btn btn-outline-light btn-sm">Download</button>
+                                <a href="javascript:;" @click="show(image)">
+                                    <button class="btn btn-outline-light btn-sm">View Details</button>
                                 </a>
-                            </div>
-                            <div class="mt-3">
-                                <p class="content-text mb-0">{{ image.datetaken }}</p>
-                                <span class="badge badge-success" v-if="image.originalformat">{{ image.originalformat.toUpperCase() }}</span>
                             </div>
                         </div>
                         </span>
@@ -55,6 +45,32 @@
             <br><br>
             <h5>No images found. Please try another query.</h5>
         </div>
+        <modal name="imageDetails" :width="1000" :height="320">
+            <div class="row m-auto">
+                <div class="col p-0">
+                    <img :src="image.url_m" alt="bull" class="w-100 h-100">
+                </div>
+                <div class="col">
+                    <div class="content-details content-right fadeIn-bottom">
+                        <h3 class="content-title">{{image.ownername}}</h3>
+                        <div class="d-inline-flex">
+                            <span><i class="fa fa-heart text-danger"></i><p>{{image.count_faves}}</p></span>
+                            <span><i class="fa fa-comments text-info"></i><p>{{image.count_comments}}</p></span>
+                            <span><i class="fa fa-eye text-warning"></i><p>{{image.views}}</p></span>
+                        </div>
+                        <div class="mt-2">
+                            <a href="javascript:;" @click="downLoadImage(image.url_o , image.title)">
+                                <button class="btn btn-outline-dark btn-sm">Download</button>
+                            </a>
+                        </div>
+                        <div class="mt-3">
+                            <p class="content-text mb-0">{{ image.datetaken }}</p>
+                            <span class="badge badge-success" v-if="image.originalformat">{{ image.originalformat }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </modal>
     </div>
 </template>
 
@@ -70,7 +86,8 @@ export default {
             per_page      : this.PerPage,
             total_results : 0,
             total_pages   : 0,
-            images        : []
+            images        : [],
+            image         : "",
         }
     },
     mounted() {
@@ -113,6 +130,15 @@ export default {
             else{
                 EventBus.$emit("SearchImages");
             }
+        },
+
+        show: function(image) {
+            this.image = image;
+            this.$modal.show('imageDetails');
+        },
+
+        hide: function() {
+            this.$modal.hide('imageDetails');
         },
         
         downLoadImage: function(imageUrl , title) {

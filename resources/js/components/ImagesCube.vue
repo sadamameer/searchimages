@@ -8,7 +8,7 @@
                     </div>
                     <div class="col text-center">
                         <input type="checkbox" name="ji" id="ji" @click="getJaccardIndexedRecords()">
-                        <label for="ji"><b>Jaccard Index</b></label>
+                        <label for="ji"><b>View Sorted Images</b></label>
                     </div>
                     <div class="col text-right">
                         <span><b>{{ total_results }}</b> matching images found</span>
@@ -19,7 +19,7 @@
                     <div class="row m-auto">
                         <div class="col-md-8">
                             <div class="row box m-auto" :id="`${'box'+x}`" :style="`${'z-index: '+x+'; top: '+(x * margin)+'px; left: '+(x * margin)+'px;'}`" v-for="(x , index) in slidesArray" :key="index+1">
-                                <div class="cell" v-for="image in getImages(index+1)" :key="image.id">
+                                <div class="cell" v-for="image in getImages(index+1)" :key="image">
                                     <a href="javascript:;" @click="show(image)">
                                         <img :src="image.url_m" alt="bull" class="w-100 h-100">
                                     </a>

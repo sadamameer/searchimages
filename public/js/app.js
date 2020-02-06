@@ -2352,6 +2352,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["PerPage"],
   data: function data() {
@@ -2363,7 +2379,8 @@ __webpack_require__.r(__webpack_exports__);
       per_page: this.PerPage,
       total_results: 0,
       total_pages: 0,
-      images: []
+      images: [],
+      image: ""
     };
   },
   mounted: function mounted() {
@@ -2406,6 +2423,13 @@ __webpack_require__.r(__webpack_exports__);
         EventBus.$emit("SearchImages");
       }
     },
+    show: function show(image) {
+      this.image = image;
+      this.$modal.show('imageDetails');
+    },
+    hide: function hide() {
+      this.$modal.hide('imageDetails');
+    },
     downLoadImage: function downLoadImage(imageUrl, title) {
       EventBus.$emit("DownloadImage", imageUrl, title);
     },
@@ -2429,6 +2453,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -40061,7 +40088,7 @@ var render = function() {
                               _vm._l(_vm.getImages(index + 1), function(image) {
                                 return _c(
                                   "div",
-                                  { key: image.id, staticClass: "cell" },
+                                  { key: image, staticClass: "cell" },
                                   [
                                     _c(
                                       "a",
@@ -40310,7 +40337,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "ji" } }, [
-      _c("b", [_vm._v("Jaccard Index")])
+      _c("b", [_vm._v("View Sorted Images")])
     ])
   }
 ]
@@ -40335,211 +40362,250 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container-fluid" }, [
-    _vm.images.length
-      ? _c("div", { staticClass: "mt-3" }, [
-          _vm.images.length && !_vm.FirstLoaded
-            ? _c("div", { staticClass: "row mt-3 mb-4" }, [
-                _c("div", { staticClass: "col" }, [
-                  _c("span", [
-                    _vm._v("Showing results from "),
-                    _c("b", [
-                      _vm._v(
-                        _vm._s(_vm.page * _vm.per_page - (_vm.per_page - 1)) +
-                          "-" +
-                          _vm._s(_vm.page * _vm.per_page)
-                      )
+  return _c(
+    "div",
+    { staticClass: "container-fluid" },
+    [
+      _vm.images.length
+        ? _c("div", { staticClass: "mt-3" }, [
+            _vm.images.length && !_vm.FirstLoaded
+              ? _c("div", { staticClass: "row mt-3 mb-4" }, [
+                  _c("div", { staticClass: "col" }, [
+                    _c("span", [
+                      _vm._v("Showing results from "),
+                      _c("b", [
+                        _vm._v(
+                          _vm._s(_vm.page * _vm.per_page - (_vm.per_page - 1)) +
+                            "-" +
+                            _vm._s(_vm.page * _vm.per_page)
+                        )
+                      ])
                     ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col text-center" }, [
-                  _c("input", {
-                    attrs: { type: "checkbox", name: "ji", id: "ji" },
-                    on: {
-                      click: function($event) {
-                        return _vm.getJaccardIndexedRecords()
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _vm._m(0)
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col text-right" }, [
-                  _c("span", [
-                    _c("b", [_vm._v(_vm._s(_vm.total_results))]),
-                    _vm._v(" matching images found")
                   ]),
                   _vm._v(" "),
-                  _c("i", {
-                    staticClass: "fa fa-object-ungroup ml-3 cursor-pointer",
-                    on: {
-                      click: function($event) {
-                        return _vm.SwitchView()
+                  _c("div", { staticClass: "col text-center" }, [
+                    _c("input", {
+                      attrs: { type: "checkbox", name: "ji", id: "ji" },
+                      on: {
+                        click: function($event) {
+                          return _vm.getJaccardIndexedRecords()
+                        }
                       }
-                    }
-                  })
+                    }),
+                    _vm._v(" "),
+                    _vm._m(0)
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col text-right" }, [
+                    _c("span", [
+                      _c("b", [_vm._v(_vm._s(_vm.total_results))]),
+                      _vm._v(" matching images found")
+                    ]),
+                    _vm._v(" "),
+                    _c("i", {
+                      staticClass: "fa fa-object-ungroup ml-3 cursor-pointer",
+                      on: {
+                        click: function($event) {
+                          return _vm.SwitchView()
+                        }
+                      }
+                    })
+                  ])
                 ])
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.images.length
-            ? _c(
-                "div",
-                { staticClass: "row" },
-                _vm._l(_vm.images, function(image) {
-                  return _c(
-                    "div",
-                    {
-                      key: image.id,
-                      staticClass: "col-md-4 p-0",
-                      attrs: { id: image.id }
-                    },
-                    [
-                      _c("div", { staticClass: "content" }, [
-                        _c("span", [
-                          _c("div", { staticClass: "content-overlay" }),
-                          _vm._v(" "),
-                          _c("img", {
-                            staticClass: "content-image",
-                            attrs: { src: image.url_m }
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            { staticClass: "content-details fadeIn-bottom" },
-                            [
-                              _c("h3", { staticClass: "content-title" }, [
-                                _vm._v(_vm._s(image.ownername.toUpperCase()))
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "d-inline-flex" }, [
-                                _c("span", [
-                                  _c("i", { staticClass: "fa fa-heart" }),
-                                  _c("p", [_vm._v(_vm._s(image.count_faves))])
-                                ]),
-                                _vm._v(" "),
-                                _c("span", [
-                                  _c("i", { staticClass: "fa fa-comments" }),
-                                  _c("p", [
-                                    _vm._v(_vm._s(image.count_comments))
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                _c("span", [
-                                  _c("i", { staticClass: "fa fa-eye" }),
-                                  _c("p", [_vm._v(_vm._s(image.views))])
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "mt-2" }, [
-                                _c(
-                                  "a",
-                                  {
-                                    attrs: { href: "javascript:;" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.downLoadImage(
-                                          image.url_o,
-                                          image.title
-                                        )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.images.length
+              ? _c(
+                  "div",
+                  { staticClass: "row" },
+                  _vm._l(_vm.images, function(image) {
+                    return _c(
+                      "div",
+                      {
+                        key: image.id,
+                        staticClass: "col-md-2 p-0",
+                        attrs: { id: image.id }
+                      },
+                      [
+                        _c("div", { staticClass: "content" }, [
+                          _c("span", [
+                            _c("div", { staticClass: "content-overlay" }),
+                            _vm._v(" "),
+                            _c("img", {
+                              staticClass: "content-image",
+                              attrs: { src: image.url_m }
+                            }),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "content-details fadeIn-bottom" },
+                              [
+                                _c("div", { staticClass: "mt-2" }, [
+                                  _c(
+                                    "a",
+                                    {
+                                      attrs: { href: "javascript:;" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.show(image)
+                                        }
                                       }
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass:
-                                          "btn btn-outline-light btn-sm"
-                                      },
-                                      [_vm._v("Download")]
-                                    )
-                                  ]
-                                )
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "mt-3" }, [
-                                _c("p", { staticClass: "content-text mb-0" }, [
-                                  _vm._v(_vm._s(image.datetaken))
-                                ]),
-                                _vm._v(" "),
-                                image.originalformat
-                                  ? _c(
-                                      "span",
-                                      { staticClass: "badge badge-success" },
-                                      [
-                                        _vm._v(
-                                          _vm._s(
-                                            image.originalformat.toUpperCase()
-                                          )
-                                        )
-                                      ]
-                                    )
-                                  : _vm._e()
-                              ])
-                            ]
-                          )
+                                    },
+                                    [
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "btn btn-outline-light btn-sm"
+                                        },
+                                        [_vm._v("View Details")]
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ]
+                            )
+                          ])
                         ])
+                      ]
+                    )
+                  }),
+                  0
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.images.length && !_vm.FirstLoaded
+              ? _c("div", { staticClass: "row mt-4 mb-4" }, [
+                  _vm.PrevPage
+                    ? _c("div", { staticClass: "col" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-outline-success",
+                            on: {
+                              click: function($event) {
+                                return _vm.ChangePageNumber(_vm.page - 1)
+                              }
+                            }
+                          },
+                          [_vm._v("Previous")]
+                        )
                       ])
-                    ]
-                  )
-                }),
-                0
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.NextPage
+                    ? _c("div", { staticClass: "col text-right" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-outline-success",
+                            on: {
+                              click: function($event) {
+                                return _vm.ChangePageNumber(_vm.page + 1)
+                              }
+                            }
+                          },
+                          [_vm._v("Next")]
+                        )
+                      ])
+                    : _vm._e()
+                ])
+              : _vm._e()
+          ])
+        : _c("div", { staticClass: "container text-center mt-5 p-5" }, [
+            _c("img", {
+              staticClass: "m-auto",
+              attrs: { src: "404.png", alt: "Nothing Found" }
+            }),
+            _vm._v(" "),
+            _c("br"),
+            _c("br"),
+            _vm._v(" "),
+            _c("h5", [_vm._v("No images found. Please try another query.")])
+          ]),
+      _vm._v(" "),
+      _c(
+        "modal",
+        { attrs: { name: "imageDetails", width: 1000, height: 320 } },
+        [
+          _c("div", { staticClass: "row m-auto" }, [
+            _c("div", { staticClass: "col p-0" }, [
+              _c("img", {
+                staticClass: "w-100 h-100",
+                attrs: { src: _vm.image.url_m, alt: "bull" }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col" }, [
+              _c(
+                "div",
+                { staticClass: "content-details content-right fadeIn-bottom" },
+                [
+                  _c("h3", { staticClass: "content-title" }, [
+                    _vm._v(_vm._s(_vm.image.ownername))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "d-inline-flex" }, [
+                    _c("span", [
+                      _c("i", { staticClass: "fa fa-heart text-danger" }),
+                      _c("p", [_vm._v(_vm._s(_vm.image.count_faves))])
+                    ]),
+                    _vm._v(" "),
+                    _c("span", [
+                      _c("i", { staticClass: "fa fa-comments text-info" }),
+                      _c("p", [_vm._v(_vm._s(_vm.image.count_comments))])
+                    ]),
+                    _vm._v(" "),
+                    _c("span", [
+                      _c("i", { staticClass: "fa fa-eye text-warning" }),
+                      _c("p", [_vm._v(_vm._s(_vm.image.views))])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-2" }, [
+                    _c(
+                      "a",
+                      {
+                        attrs: { href: "javascript:;" },
+                        on: {
+                          click: function($event) {
+                            return _vm.downLoadImage(
+                              _vm.image.url_o,
+                              _vm.image.title
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "button",
+                          { staticClass: "btn btn-outline-dark btn-sm" },
+                          [_vm._v("Download")]
+                        )
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mt-3" }, [
+                    _c("p", { staticClass: "content-text mb-0" }, [
+                      _vm._v(_vm._s(_vm.image.datetaken))
+                    ]),
+                    _vm._v(" "),
+                    _vm.image.originalformat
+                      ? _c("span", { staticClass: "badge badge-success" }, [
+                          _vm._v(_vm._s(_vm.image.originalformat))
+                        ])
+                      : _vm._e()
+                  ])
+                ]
               )
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.images.length && !_vm.FirstLoaded
-            ? _c("div", { staticClass: "row mt-4 mb-4" }, [
-                _vm.PrevPage
-                  ? _c("div", { staticClass: "col" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-outline-success",
-                          on: {
-                            click: function($event) {
-                              return _vm.ChangePageNumber(_vm.page - 1)
-                            }
-                          }
-                        },
-                        [_vm._v("Previous")]
-                      )
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.NextPage
-                  ? _c("div", { staticClass: "col text-right" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-outline-success",
-                          on: {
-                            click: function($event) {
-                              return _vm.ChangePageNumber(_vm.page + 1)
-                            }
-                          }
-                        },
-                        [_vm._v("Next")]
-                      )
-                    ])
-                  : _vm._e()
-              ])
-            : _vm._e()
-        ])
-      : _c("div", { staticClass: "container text-center mt-5 p-5" }, [
-          _c("img", {
-            staticClass: "m-auto",
-            attrs: { src: "404.png", alt: "Nothing Found" }
-          }),
-          _vm._v(" "),
-          _c("br"),
-          _c("br"),
-          _vm._v(" "),
-          _c("h5", [_vm._v("No images found. Please try another query.")])
-        ])
-  ])
+            ])
+          ])
+        ]
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -40547,7 +40613,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "ji" } }, [
-      _c("b", [_vm._v("Jaccard Index")])
+      _c("b", [_vm._v("View Sorted Images")])
     ])
   }
 ]
@@ -40575,7 +40641,7 @@ var render = function() {
   return _c("div", [
     _c("nav", { staticClass: "navbar navbar-expand-lg navbar-dark bg-dark" }, [
       _c("a", { staticClass: "navbar-brand", attrs: { href: "/" } }, [
-        _vm._v("Exploration of Web Image Search Results")
+        _vm._v("I-Cuboid")
       ]),
       _vm._v(" "),
       _vm._m(0),
@@ -40588,48 +40654,51 @@ var render = function() {
               attrs: { id: "navbarSupportedContent" }
             },
             [
-              _c("ul", { staticClass: "navbar-nav mr-auto" }),
-              _vm._v(" "),
-              _c("span", { staticClass: "form-inline my-2 my-lg-0" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.Query,
-                      expression: "Query"
-                    }
-                  ],
-                  staticClass: "form-control mr-sm-2",
-                  attrs: {
-                    type: "text",
-                    placeholder: "e.g. Mountains",
-                    "aria-label": "Search"
-                  },
-                  domProps: { value: _vm.Query },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+              _c("ul", { staticClass: "navbar-nav w-100" }, [
+                _c("li", { staticClass: "nav-item active m-auto" }, [
+                  _c("span", { staticClass: "form-inline" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.Query,
+                          expression: "Query"
+                        }
+                      ],
+                      staticClass: "form-control mr-sm-2",
+                      staticStyle: { width: "450px" },
+                      attrs: {
+                        type: "text",
+                        placeholder: "e.g. Mountains",
+                        "aria-label": "Search"
+                      },
+                      domProps: { value: _vm.Query },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.Query = $event.target.value
+                        }
                       }
-                      _vm.Query = $event.target.value
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-success my-2 my-sm-0",
-                    attrs: { type: "button", disabled: _vm.btnDisabled },
-                    on: {
-                      click: function($event) {
-                        return _vm.fetchPhotos(true)
-                      }
-                    }
-                  },
-                  [_vm._v("Search")]
-                )
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-outline-success my-2 my-sm-0",
+                        attrs: { type: "button", disabled: _vm.btnDisabled },
+                        on: {
+                          click: function($event) {
+                            return _vm.fetchPhotos(true)
+                          }
+                        }
+                      },
+                      [_vm._v("Search")]
+                    )
+                  ])
+                ])
               ])
             ]
           )

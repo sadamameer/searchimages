@@ -577,6 +577,11 @@ img {
   transition: transform 1s;
 }
 
+#neighbors img:hover{
+  transform: scale(1.5);
+  transition: transform 1s;
+}
+
 #container .dull img{
   opacity: 0.2;
 }

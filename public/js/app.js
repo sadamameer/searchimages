@@ -2159,12 +2159,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["PerPage"],
   data: function data() {
     return {
       FirstLoaded: true,
+      neighbordsPanel: false,
       PrevPage: false,
       NextPage: false,
       page: 1,
@@ -2176,6 +2219,8 @@ __webpack_require__.r(__webpack_exports__);
       currentActive: 0,
       margin: 40,
       per_slide: 25,
+      plane: 0,
+      point: 0,
       images: [],
       image: ""
     };
@@ -2231,6 +2276,10 @@ __webpack_require__.r(__webpack_exports__);
     downLoadImage: function downLoadImage(imageUrl, title) {
       EventBus.$emit("DownloadImage", imageUrl, title);
     },
+    viewNeighbors: function viewNeighbors() {
+      this.neighbordsPanel = true;
+      this.hide();
+    },
     getSlidesArray: function getSlidesArray() {
       this.slidesArray = [];
 
@@ -2240,9 +2289,12 @@ __webpack_require__.r(__webpack_exports__);
 
       this.slidesArray = this.slidesArray.slice().reverse();
     },
-    show: function show(image) {
+    show: function show(image, plane, point) {
+      this.plane = plane;
+      this.point = point;
       this.image = image;
       this.$modal.show('imageDetails');
+      this.neighbordsPanel = false;
     },
     hide: function hide() {
       this.$modal.hide('imageDetails');
@@ -40085,10 +40137,13 @@ var render = function() {
                                     "px;"),
                                 attrs: { id: "" + ("box" + x) }
                               },
-                              _vm._l(_vm.getImages(index + 1), function(image) {
+                              _vm._l(_vm.getImages(index + 1), function(
+                                image,
+                                innerIndex
+                              ) {
                                 return _c(
                                   "div",
-                                  { key: image, staticClass: "cell" },
+                                  { key: image.id, staticClass: "cell" },
                                   [
                                     _c(
                                       "a",
@@ -40096,7 +40151,11 @@ var render = function() {
                                         attrs: { href: "javascript:;" },
                                         on: {
                                           click: function($event) {
-                                            return _vm.show(image)
+                                            _vm.show(
+                                              image,
+                                              index + 1,
+                                              innerIndex + 1
+                                            )
                                           }
                                         }
                                       },
@@ -40120,6 +40179,211 @@ var render = function() {
                         ),
                         _vm._v(" "),
                         _c("div", { staticClass: "col text-center mt-5" }, [
+                          _vm.neighbordsPanel
+                            ? _c("div", [
+                                _c("h1", [_vm._v("Neighbors")]),
+                                _vm._v(" "),
+                                _c("hr"),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass: "row",
+                                    attrs: { id: "neighbors" }
+                                  },
+                                  [
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-4 mt-4" },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: { href: "javascript:;" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.show(
+                                                  _vm.images[0],
+                                                  1,
+                                                  1
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass: "w-100 h-100",
+                                              attrs: {
+                                                src: _vm.images[0].url_m,
+                                                alt: "bull"
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-4 mt-4" },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: { href: "javascript:;" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.show(
+                                                  _vm.images[1],
+                                                  1,
+                                                  1
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass: "w-100 h-100",
+                                              attrs: {
+                                                src: _vm.images[1].url_m,
+                                                alt: "bull"
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-4 mt-4" },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: { href: "javascript:;" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.show(
+                                                  _vm.images[2],
+                                                  1,
+                                                  1
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass: "w-100 h-100",
+                                              attrs: {
+                                                src: _vm.images[2].url_m,
+                                                alt: "bull"
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-4 mt-4" },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: { href: "javascript:;" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.show(
+                                                  _vm.images[3],
+                                                  1,
+                                                  1
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass: "w-100 h-100",
+                                              attrs: {
+                                                src: _vm.images[3].url_m,
+                                                alt: "bull"
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-4 mt-4" },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: { href: "javascript:;" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.show(
+                                                  _vm.images[4],
+                                                  1,
+                                                  1
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass: "w-100 h-100",
+                                              attrs: {
+                                                src: _vm.images[4].url_m,
+                                                alt: "bull"
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-4 mt-4" },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: { href: "javascript:;" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.show(
+                                                  _vm.images[5],
+                                                  1,
+                                                  1
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass: "w-100 h-100",
+                                              attrs: {
+                                                src: _vm.images[5].url_m,
+                                                alt: "bull"
+                                              }
+                                            })
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("hr")
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
                           _c("h1", [_vm._v("Switch Planes")]),
                           _vm._v(" "),
                           _c("hr"),
@@ -40141,7 +40405,7 @@ var render = function() {
                                             "button",
                                             {
                                               staticClass:
-                                                "btn btn-block btn-primary",
+                                                "btn btn-block btn-sm btn-primary",
                                               on: {
                                                 click: function($event) {
                                                   return _vm.toggleSlide(x)
@@ -40159,7 +40423,7 @@ var render = function() {
                                             "button",
                                             {
                                               staticClass:
-                                                "btn btn-block btn-outline-primary",
+                                                "btn btn-block btn-sm btn-outline-primary",
                                               on: {
                                                 click: function($event) {
                                                   return _vm.toggleSlide(x)
@@ -40193,7 +40457,7 @@ var render = function() {
                                           "button",
                                           {
                                             staticClass:
-                                              "btn btn-block btn-outline-success",
+                                              "btn btn-block btn-sm btn-outline-success",
                                             on: {
                                               click: function($event) {
                                                 return _vm.ChangePageNumber(
@@ -40214,7 +40478,7 @@ var render = function() {
                                         "button",
                                         {
                                           staticClass:
-                                            "btn btn-block btn-outline-success",
+                                            "btn btn-block btn-sm btn-outline-success",
                                           on: {
                                             click: function($event) {
                                               return _vm.ChangePageNumber(
@@ -40226,7 +40490,11 @@ var render = function() {
                                         [_vm._v("Next")]
                                       )
                                     ])
-                                  : _vm._e()
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c("br"),
+                                _c("br"),
+                                _c("br")
                               ])
                             : _vm._e()
                         ])
@@ -40305,6 +40573,25 @@ var render = function() {
                           "button",
                           { staticClass: "btn btn-outline-dark btn-sm" },
                           [_vm._v("Download")]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        attrs: { href: "javascript:;" },
+                        on: {
+                          click: function($event) {
+                            return _vm.viewNeighbors(_vm.image)
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "button",
+                          { staticClass: "btn btn-outline-primary btn-sm" },
+                          [_vm._v("View Neighbors")]
                         )
                       ]
                     )

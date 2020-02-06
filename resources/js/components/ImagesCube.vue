@@ -19,30 +19,69 @@
                     <div class="row m-auto">
                         <div class="col-md-8">
                             <div class="row box m-auto" :id="`${'box'+x}`" :style="`${'z-index: '+x+'; top: '+(x * margin)+'px; left: '+(x * margin)+'px;'}`" v-for="(x , index) in slidesArray" :key="index+1">
-                                <div class="cell" v-for="image in getImages(index+1)" :key="image">
-                                    <a href="javascript:;" @click="show(image)">
+                                <div class="cell" v-for="(image , innerIndex) in getImages(index+1)" :key="image.id">
+                                    <a href="javascript:;" @click="show(image , (index+1) , (innerIndex+1))">
                                         <img :src="image.url_m" alt="bull" class="w-100 h-100">
                                     </a>
                                 </div>
                             </div>
                         </div>
                         <div class="col text-center mt-5">
+                             <div v-if="neighbordsPanel">
+                                <h1>Neighbors</h1>
+                                <hr>
+                                <div class="row" id="neighbors">
+                                    <div class="col-md-4 mt-4">
+                                        <a href="javascript:;" @click="show(images[0] , 1 , 1)">
+                                            <img :src="images[0].url_m" alt="bull" class="w-100 h-100">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 mt-4">
+                                        <a href="javascript:;" @click="show(images[1] , 1 , 1)">
+                                            <img :src="images[1].url_m" alt="bull" class="w-100 h-100">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 mt-4">
+                                        <a href="javascript:;" @click="show(images[2] , 1 , 1)">
+                                            <img :src="images[2].url_m" alt="bull" class="w-100 h-100">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 mt-4">
+                                        <a href="javascript:;" @click="show(images[3] , 1 , 1)">
+                                            <img :src="images[3].url_m" alt="bull" class="w-100 h-100">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 mt-4">
+                                        <a href="javascript:;" @click="show(images[4] , 1 , 1)">
+                                            <img :src="images[4].url_m" alt="bull" class="w-100 h-100">
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 mt-4">
+                                        <a href="javascript:;" @click="show(images[5] , 1 , 1)">
+                                            <img :src="images[5].url_m" alt="bull" class="w-100 h-100">
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+
                             <h1>Switch Planes</h1>
                             <hr>
                             <div class="row m-auto" v-if="images.length && !FirstLoaded">
                                 <div class="col-lg-12 mb-1" v-for="(x , index) in slidesArray" :key="index+1">
-                                    <button class="btn btn-block btn-primary" v-if="currentActive == x" @click="toggleSlide(x)">Show Plane {{ index+1 }}</button>
-                                    <button class="btn btn-block btn-outline-primary" v-else @click="toggleSlide(x)">Show Plane {{ index+1 }}</button>
+                                    <button class="btn btn-block btn-sm btn-primary" v-if="currentActive == x" @click="toggleSlide(x)">Show Plane {{ index+1 }}</button>
+                                    <button class="btn btn-block btn-sm btn-outline-primary" v-else @click="toggleSlide(x)">Show Plane {{ index+1 }}</button>
                                 </div>
                             </div>
                             <hr>
                             <div class="row m-auto" v-if="images.length && !FirstLoaded">
                                 <div class="col-lg-12 mb-1" v-if="PrevPage">
-                                    <button class="btn btn-block btn-outline-success" @click="ChangePageNumber(page-1)">Previous</button>
+                                    <button class="btn btn-block btn-sm btn-outline-success" @click="ChangePageNumber(page-1)">Previous</button>
                                 </div>
                                 <div class="col-lg-12" v-if="NextPage">
-                                    <button class="btn btn-block btn-outline-success" @click="ChangePageNumber(page+1)">Next</button>
+                                    <button class="btn btn-block btn-sm btn-outline-success" @click="ChangePageNumber(page+1)">Next</button>
                                 </div>
+                                <br><br><br>
                             </div>
                         </div>
                     </div>
@@ -71,6 +110,9 @@
                             <a href="javascript:;" @click="downLoadImage(image.url_o , image.title)">
                                 <button class="btn btn-outline-dark btn-sm">Download</button>
                             </a>
+                            <a href="javascript:;" @click="viewNeighbors(image)">
+                                <button class="btn btn-outline-primary btn-sm">View Neighbors</button>
+                            </a>
                         </div>
                         <div class="mt-3">
                             <p class="content-text mb-0">{{ image.datetaken }}</p>
@@ -89,20 +131,23 @@ export default {
     props : ["PerPage"],
     data() {
         return {
-            FirstLoaded   : true,
-            PrevPage      : false,
-            NextPage      : false,
-            page          : 1,
-            per_page      : this.PerPage,
-            total_results : 0,
-            total_pages   : 0,
-            slides        : 0,
-            slidesArray   : [],
-            currentActive : 0,
-            margin        : 40,
-            per_slide     : 25,
-            images        : [],
-            image         : "",
+            FirstLoaded       : true,
+            neighbordsPanel   : false,
+            PrevPage          : false,
+            NextPage          : false,
+            page              : 1,
+            per_page          : this.PerPage,
+            total_results     : 0,
+            total_pages       : 0,
+            slides            : 0,
+            slidesArray       : [],
+            currentActive     : 0,
+            margin            : 40,
+            per_slide         : 25,
+            plane             : 0,
+            point             : 0,
+            images            : [],
+            image             : "",
         }
     },
     mounted() {
@@ -154,6 +199,11 @@ export default {
         downLoadImage: function(imageUrl , title) {
             EventBus.$emit("DownloadImage" , imageUrl , title);
         },
+        
+        viewNeighbors: function() {
+            this.neighbordsPanel = true;
+            this.hide();
+        },
 
         getSlidesArray: function() {
             this.slidesArray = [];
@@ -161,9 +211,12 @@ export default {
             this.slidesArray = this.slidesArray.slice().reverse();
         },
         
-        show: function(image) {
+        show: function(image , plane , point) {
+            this.plane = plane;
+            this.point = point;
             this.image = image;
             this.$modal.show('imageDetails');
+            this.neighbordsPanel = false;
         },
 
         hide: function() {

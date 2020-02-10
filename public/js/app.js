@@ -2201,6 +2201,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["PerPage"],
@@ -2221,8 +2247,20 @@ __webpack_require__.r(__webpack_exports__);
       per_slide: 25,
       plane: 0,
       point: 0,
+      tempLeftPoint: "",
+      tempTopPoint: "",
+      tempRightPoint: "",
+      tempBottomPoint: "",
+      tempFrontPoint: "",
+      tempBackPoint: "",
       images: [],
-      image: ""
+      image: "",
+      leftImage: "",
+      rightImage: "",
+      topImage: "",
+      bottomImage: "",
+      frontImage: "",
+      backImage: ""
     };
   },
   mounted: function mounted() {
@@ -2272,13 +2310,70 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         EventBus.$emit("SearchImages");
       }
+
+      this.hide();
+      this.neighbordsPanel = false;
     },
     downLoadImage: function downLoadImage(imageUrl, title) {
       EventBus.$emit("DownloadImage", imageUrl, title);
     },
     viewNeighbors: function viewNeighbors() {
+      this.getLeftNeighbor();
+      this.getRightNeighbor();
+      this.getTopNeighbor();
+      this.getBottomNeighbor();
+      this.getFrontNeighbor();
+      this.getBackNeighbor();
       this.neighbordsPanel = true;
       this.hide();
+    },
+    getLeftNeighbor: function getLeftNeighbor() {
+      if ((this.point - 1) % 5 != 0) {
+        this.tempLeftPoint = this.point + this.per_slide * (this.plane - 1) - 1;
+        this.leftImage = this.images[this.tempLeftPoint - 1];
+      } else {
+        this.leftImage = "";
+      }
+    },
+    getRightNeighbor: function getRightNeighbor() {
+      if (this.point % 5 != 0) {
+        this.tempRightPoint = this.point + this.per_slide * (this.plane - 1);
+        this.rightImage = this.images[this.tempRightPoint];
+      } else {
+        this.rightImage = "";
+      }
+    },
+    getTopNeighbor: function getTopNeighbor() {
+      if (this.point > 5) {
+        this.tempTopPoint = this.point + this.per_slide * (this.plane - 1) - 5;
+        this.topImage = this.images[this.tempTopPoint - 1];
+      } else {
+        this.topImage = "";
+      }
+    },
+    getBottomNeighbor: function getBottomNeighbor() {
+      if (this.point < 21) {
+        this.tempBottomPoint = this.point + this.per_slide * (this.plane - 1) + 5;
+        this.bottomImage = this.images[this.tempBottomPoint - 1];
+      } else {
+        this.bottomImage = "";
+      }
+    },
+    getFrontNeighbor: function getFrontNeighbor() {
+      if (this.plane > 1) {
+        this.tempFrontPoint = this.point + this.per_slide * (this.plane - 1) - 25;
+        this.frontImage = this.images[this.tempFrontPoint - 1];
+      } else {
+        this.frontImage = "";
+      }
+    },
+    getBackNeighbor: function getBackNeighbor() {
+      if (this.plane < this.slides) {
+        this.tempBackPoint = this.point + this.per_slide * (this.plane - 1) + 25;
+        this.backImage = this.images[this.tempBackPoint - 1];
+      } else {
+        this.backImage = "";
+      }
     },
     getSlidesArray: function getSlidesArray() {
       this.slidesArray = [];
@@ -40185,41 +40280,81 @@ var render = function() {
                                 _vm._v(" "),
                                 _c("hr"),
                                 _vm._v(" "),
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass: "row",
-                                    attrs: { id: "neighbors" }
-                                  },
-                                  [
+                                _c("div", { attrs: { id: "neighbors" } }, [
+                                  _c("div", { staticClass: "row" }, [
+                                    _c("div", { staticClass: "col-md-4 mt-4" }),
+                                    _vm._v(" "),
                                     _c(
                                       "div",
                                       { staticClass: "col-md-4 mt-4" },
                                       [
-                                        _c(
-                                          "a",
-                                          {
-                                            attrs: { href: "javascript:;" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.show(
-                                                  _vm.images[0],
-                                                  1,
-                                                  1
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("img", {
-                                              staticClass: "w-100 h-100",
-                                              attrs: {
-                                                src: _vm.images[0].url_m,
-                                                alt: "bull"
-                                              }
-                                            })
-                                          ]
-                                        )
+                                        _vm.topImage
+                                          ? _c(
+                                              "a",
+                                              {
+                                                attrs: { href: "javascript:;" },
+                                                on: {
+                                                  click: function($event) {
+                                                    _vm.show(
+                                                      _vm.topImage,
+                                                      _vm.plane,
+                                                      _vm.tempTopPoint -
+                                                        (_vm.plane - 1) *
+                                                          _vm.per_slide
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("img", {
+                                                  staticClass: "w-100 h-100",
+                                                  attrs: {
+                                                    src: _vm.topImage.url_m,
+                                                    alt: "bull"
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "col-md-4 mt-4" })
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "row" }, [
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-4 mt-4" },
+                                      [
+                                        _vm.leftImage
+                                          ? _c(
+                                              "a",
+                                              {
+                                                attrs: { href: "javascript:;" },
+                                                on: {
+                                                  click: function($event) {
+                                                    _vm.show(
+                                                      _vm.leftImage,
+                                                      _vm.plane,
+                                                      _vm.tempLeftPoint -
+                                                        (_vm.plane - 1) *
+                                                          _vm.per_slide
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("img", {
+                                                  staticClass: "w-100 h-100",
+                                                  attrs: {
+                                                    src: this.leftImage.url_m,
+                                                    alt: "bull"
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          : _vm._e()
                                       ]
                                     ),
                                     _vm._v(" "),
@@ -40234,9 +40369,9 @@ var render = function() {
                                             on: {
                                               click: function($event) {
                                                 return _vm.show(
-                                                  _vm.images[1],
-                                                  1,
-                                                  1
+                                                  _vm.image,
+                                                  _vm.plane,
+                                                  _vm.point
                                                 )
                                               }
                                             }
@@ -40245,7 +40380,7 @@ var render = function() {
                                             _c("img", {
                                               staticClass: "w-100 h-100",
                                               attrs: {
-                                                src: _vm.images[1].url_m,
+                                                src: _vm.image.url_m,
                                                 alt: "bull"
                                               }
                                             })
@@ -40258,127 +40393,154 @@ var render = function() {
                                       "div",
                                       { staticClass: "col-md-4 mt-4" },
                                       [
-                                        _c(
-                                          "a",
-                                          {
-                                            attrs: { href: "javascript:;" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.show(
-                                                  _vm.images[2],
-                                                  1,
-                                                  1
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("img", {
-                                              staticClass: "w-100 h-100",
-                                              attrs: {
-                                                src: _vm.images[2].url_m,
-                                                alt: "bull"
-                                              }
-                                            })
-                                          ]
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "col-md-4 mt-4" },
-                                      [
-                                        _c(
-                                          "a",
-                                          {
-                                            attrs: { href: "javascript:;" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.show(
-                                                  _vm.images[3],
-                                                  1,
-                                                  1
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("img", {
-                                              staticClass: "w-100 h-100",
-                                              attrs: {
-                                                src: _vm.images[3].url_m,
-                                                alt: "bull"
-                                              }
-                                            })
-                                          ]
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "col-md-4 mt-4" },
-                                      [
-                                        _c(
-                                          "a",
-                                          {
-                                            attrs: { href: "javascript:;" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.show(
-                                                  _vm.images[4],
-                                                  1,
-                                                  1
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("img", {
-                                              staticClass: "w-100 h-100",
-                                              attrs: {
-                                                src: _vm.images[4].url_m,
-                                                alt: "bull"
-                                              }
-                                            })
-                                          ]
-                                        )
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      { staticClass: "col-md-4 mt-4" },
-                                      [
-                                        _c(
-                                          "a",
-                                          {
-                                            attrs: { href: "javascript:;" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.show(
-                                                  _vm.images[5],
-                                                  1,
-                                                  1
-                                                )
-                                              }
-                                            }
-                                          },
-                                          [
-                                            _c("img", {
-                                              staticClass: "w-100 h-100",
-                                              attrs: {
-                                                src: _vm.images[5].url_m,
-                                                alt: "bull"
-                                              }
-                                            })
-                                          ]
-                                        )
+                                        _vm.rightImage
+                                          ? _c(
+                                              "a",
+                                              {
+                                                attrs: { href: "javascript:;" },
+                                                on: {
+                                                  click: function($event) {
+                                                    _vm.show(
+                                                      _vm.rightImage,
+                                                      _vm.plane,
+                                                      _vm.tempRightPoint +
+                                                        1 -
+                                                        (_vm.plane - 1) *
+                                                          _vm.per_slide
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("img", {
+                                                  staticClass: "w-100 h-100",
+                                                  attrs: {
+                                                    src: this.rightImage.url_m,
+                                                    alt: "bull"
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          : _vm._e()
                                       ]
                                     )
-                                  ]
-                                ),
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "row" }, [
+                                    _c("div", { staticClass: "col-md-4 mt-4" }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-4 mt-4" },
+                                      [
+                                        _vm.bottomImage
+                                          ? _c(
+                                              "a",
+                                              {
+                                                attrs: { href: "javascript:;" },
+                                                on: {
+                                                  click: function($event) {
+                                                    _vm.show(
+                                                      _vm.bottomImage,
+                                                      _vm.plane,
+                                                      _vm.tempBottomPoint -
+                                                        (_vm.plane - 1) *
+                                                          _vm.per_slide
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("img", {
+                                                  staticClass: "w-100 h-100",
+                                                  attrs: {
+                                                    src: _vm.bottomImage.url_m,
+                                                    alt: "bull"
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "col-md-4 mt-4" })
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "row" }, [
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-4 mt-4" },
+                                      [
+                                        _vm.frontImage
+                                          ? _c(
+                                              "a",
+                                              {
+                                                attrs: { href: "javascript:;" },
+                                                on: {
+                                                  click: function($event) {
+                                                    _vm.show(
+                                                      _vm.frontImage,
+                                                      _vm.plane - 1,
+                                                      _vm.tempFrontPoint -
+                                                        (_vm.plane - 2) *
+                                                          _vm.per_slide
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("img", {
+                                                  staticClass: "w-100 h-100",
+                                                  attrs: {
+                                                    src: _vm.frontImage.url_m,
+                                                    alt: "bull"
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "col-md-4 mt-4" }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-4 mt-4" },
+                                      [
+                                        _vm.backImage
+                                          ? _c(
+                                              "a",
+                                              {
+                                                attrs: { href: "javascript:;" },
+                                                on: {
+                                                  click: function($event) {
+                                                    _vm.show(
+                                                      _vm.backImage,
+                                                      _vm.plane + 1,
+                                                      _vm.tempBackPoint -
+                                                        _vm.plane *
+                                                          _vm.per_slide
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("img", {
+                                                  staticClass: "w-100 h-100",
+                                                  attrs: {
+                                                    src: _vm.backImage.url_m,
+                                                    alt: "bull"
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    )
+                                  ])
+                                ]),
                                 _vm._v(" "),
                                 _c("hr")
                               ])
@@ -40540,16 +40702,19 @@ var render = function() {
                   _c("div", { staticClass: "d-inline-flex" }, [
                     _c("span", [
                       _c("i", { staticClass: "fa fa-heart text-danger" }),
+                      _vm._v(" "),
                       _c("p", [_vm._v(_vm._s(_vm.image.count_faves))])
                     ]),
                     _vm._v(" "),
                     _c("span", [
                       _c("i", { staticClass: "fa fa-comments text-info" }),
+                      _vm._v(" "),
                       _c("p", [_vm._v(_vm._s(_vm.image.count_comments))])
                     ]),
                     _vm._v(" "),
                     _c("span", [
                       _c("i", { staticClass: "fa fa-eye text-warning" }),
+                      _vm._v(" "),
                       _c("p", [_vm._v(_vm._s(_vm.image.views))])
                     ])
                   ]),
@@ -40583,7 +40748,7 @@ var render = function() {
                         attrs: { href: "javascript:;" },
                         on: {
                           click: function($event) {
-                            return _vm.viewNeighbors(_vm.image)
+                            return _vm.viewNeighbors()
                           }
                         }
                       },

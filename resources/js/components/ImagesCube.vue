@@ -68,13 +68,13 @@
                            </div>
                            <div class="row">
                               <div class="col-md-4 mt-4">
-                                 <a v-if="frontImage" href="javascript:;" @click="show(frontImage , (plane - 1) , (tempFrontPoint - ((plane - 2) * (per_slide))))">
+                                 <a v-if="frontImage" href="javascript:;" @click="show(frontImage , (plane - 1) , (tempFrontPoint - ((plane - 2) * (per_slide))) , 'front')">
                                  <img :src="frontImage.url_m" alt="bull" class="w-100 h-100">
                                  </a>
                               </div>
                               <div class="col-md-4 mt-4"></div>
                               <div class="col-md-4 mt-4">
-                                 <a v-if="backImage" href="javascript:;" @click="show(backImage , (plane + 1) , ((tempBackPoint) - (((plane) * per_slide))))">
+                                 <a v-if="backImage" href="javascript:;" @click="show(backImage , (plane + 1) , ((tempBackPoint) - (((plane) * per_slide))) , 'back')">
                                  <img :src="backImage.url_m" alt="bull" class="w-100 h-100">
                                  </a>
                               </div>
@@ -186,6 +186,7 @@ export default {
             bottomImage     : "",
             frontImage      : "",
             backImage       : "",
+            frontOrBack     : "",
         }
     },
     mounted() {
@@ -249,6 +250,13 @@ export default {
             this.getBackNeighbor();
             this.neighbordsPanel = true;
             this.hide();
+            if (this.frontOrBack == "back") {
+                this.currentActive -= 1;
+            }
+            if (this.frontOrBack == "front") {
+                this.currentActive += 1;
+            }
+            this.toggleSlide(this.currentActive);
         },
 
         getLeftNeighbor: function() {
@@ -317,12 +325,13 @@ export default {
             this.slidesArray = this.slidesArray.slice().reverse();
         },
         
-        show: function(image , plane , point) {
+        show: function(image , plane , point , frontOrBack = "") {
             this.plane = plane;
             this.point = point;
             this.image = image;
             this.$modal.show('imageDetails');
             this.neighbordsPanel = false;
+            this.frontOrBack     = frontOrBack;
         },
 
         hide: function() {

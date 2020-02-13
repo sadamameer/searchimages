@@ -2260,7 +2260,8 @@ __webpack_require__.r(__webpack_exports__);
       topImage: "",
       bottomImage: "",
       frontImage: "",
-      backImage: ""
+      backImage: "",
+      frontOrBack: ""
     };
   },
   mounted: function mounted() {
@@ -2326,6 +2327,16 @@ __webpack_require__.r(__webpack_exports__);
       this.getBackNeighbor();
       this.neighbordsPanel = true;
       this.hide();
+
+      if (this.frontOrBack == "back") {
+        this.currentActive -= 1;
+      }
+
+      if (this.frontOrBack == "front") {
+        this.currentActive += 1;
+      }
+
+      this.toggleSlide(this.currentActive);
     },
     getLeftNeighbor: function getLeftNeighbor() {
       if ((this.point - 1) % 5 != 0) {
@@ -2385,11 +2396,13 @@ __webpack_require__.r(__webpack_exports__);
       this.slidesArray = this.slidesArray.slice().reverse();
     },
     show: function show(image, plane, point) {
+      var frontOrBack = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : "";
       this.plane = plane;
       this.point = point;
       this.image = image;
       this.$modal.show('imageDetails');
       this.neighbordsPanel = false;
+      this.frontOrBack = frontOrBack;
     },
     hide: function hide() {
       this.$modal.hide('imageDetails');
@@ -40484,7 +40497,8 @@ var render = function() {
                                                       _vm.plane - 1,
                                                       _vm.tempFrontPoint -
                                                         (_vm.plane - 2) *
-                                                          _vm.per_slide
+                                                          _vm.per_slide,
+                                                      "front"
                                                     )
                                                   }
                                                 }
@@ -40521,7 +40535,8 @@ var render = function() {
                                                       _vm.plane + 1,
                                                       _vm.tempBackPoint -
                                                         _vm.plane *
-                                                          _vm.per_slide
+                                                          _vm.per_slide,
+                                                      "back"
                                                     )
                                                   }
                                                 }
